@@ -43,11 +43,11 @@ class About(Screen):
 			})
 
 	def populate(self):
-		self["lab1"] = StaticText(_("openHDF by HDF Image Team"))
-		self["lab2"] = StaticText(_("Support at") + " www.HDFreaks.cc")
+		self["lab1"] = StaticText(_("openHDF Experimental"))
+		self["lab2"] = StaticText(_("Support at") + " vuplus-images.co.uk")
 		model = None
 		AboutText = ""
-		self["lab2"] = StaticText(_("Support @") + " www.hdfreaks.cc")
+		self["lab2"] = StaticText(_("Support @") + " vuplus-images.co.uk")
 		AboutText += _("Model:\t%s %s - OEM Model: %s\n") % (getMachineBrand(), getMachineName(), getBrandOEM())
 
 		if path.exists('/proc/stb/info/chipset'):
