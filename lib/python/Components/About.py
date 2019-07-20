@@ -8,10 +8,7 @@ def getVersionString():
 
 def getFlashDateString():
 	try:
-		if path.exists("/boot/STARTUP"):
-			return _("Multiboot active")
-		else:
-			return time.strftime(_("%Y-%m-%d"), time.localtime(os.stat("/boot").st_ctime))
+		return time.strftime(_("%Y-%m-%d"), time.localtime(os.stat("/boot").st_ctime))
 	except:
 		return _("unknown")
 
@@ -38,9 +35,9 @@ def getModelString():
 def getChipSetString():
 	if getMachineBuild() in ('dm7080','dm820'):
 		return "7435"
-	elif getMachineBuild() in ('dm520'):
+	elif getMachineBuild() in ('dm520','dm525'):
 		return "73625"
-	elif getMachineBuild() in ('dm900'):
+	elif getMachineBuild() in ('dm900','dm920'):
 		return "7252S"
 	elif getMachineBuild() in ('hd51','sf4008'):
 		return "7251S"
@@ -54,9 +51,9 @@ def getChipSetString():
 			return "unavailable"
 
 def getCPUString():
-	if getMachineBuild() in ('vuuno4k', 'vuultimo4k','vusolo4k', 'hd51', 'hd52', 'sf4008', 'dm900', 'gb7252', 'dags7252', 'vs1500', 'h7', '8100s'):
+	if getMachineBuild() in ('vuuno4k', 'vuultimo4k','vusolo4k', 'hd51', 'hd52', 'sf4008', 'dm900', 'dm920', 'gb7252', 'dags7252', 'vs1500', 'h7', '8100s','osmio4k'):
 		return "Broadcom "
-	elif getMachineBuild() in ('u5','u51','u52','u53','u5pvr','h9','sf8008'):
+	elif getMachineBuild() in ('u41','u42','u5','u51','u52','u53','u5pvr','h9','sf8008','sf8008s','sf8008t','hd60','hd61','i55plus'):
 		return "Hisilicon"
 	else:
 		try:
@@ -81,11 +78,13 @@ def getCPUSpeedString():
 		return "1,5 GHz"
 	elif getMachineBuild() in ('vuuno4k','dm900', 'gb7252', 'dags7252'):
 		return "1,7 GHz"
-	elif getMachineBuild() in ('u5','u51','u52','u53','u5pvr','h9','sf8008'):
+	elif getMachineBuild() in ('u5','u51','u52','u53','u5pvr','h9','sf8008','sf8008s','sf8008t','hd60','hd61','i55plus', 'gbmv200'):
 		return "1,6 GHz"
+	elif getMachineBuild() in ('u41','u42'):
+		return "1,0 GHz"
 	elif getMachineBuild() in ('formuler1tc','formuler1', 'triplex'):
 		return "1,3 GHz"
-	elif getMachineBuild() in ('hd51','hd52','sf4008','vs1500','et1x000','h7','8100s'):
+	elif getMachineBuild() in ('hd51','hd52','sf4008','vs1500','et1x000','h7','8100s','osmio4k'):
 		try:
 			import binascii
 			f = open('/sys/firmware/devicetree/base/cpus/cpu@0/clock-frequency', 'rb')
@@ -122,8 +121,10 @@ def getCpuCoresString():
 			if len(splitted) > 1:
 				splitted[1] = splitted[1].replace('\n','')
 				if splitted[0].startswith("processor"):
-					if getMachineBuild() in ('u5','u51','u52','u53','u5pvr','h9','sf8008'):
+					if getMachineBuild() in ('u5','u51','u52','u53','u5pvr','h9','sf8008','sf8008s','sf8008t','hd60','hd61','i55plus'):
 						cores = 4
+					elif getMachineBuild() in ('u41','u42'):
+						cores = 2
 					elif int(splitted[1]) > 0:
 						cores = 2
 					else:

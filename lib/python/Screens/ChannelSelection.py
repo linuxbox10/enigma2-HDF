@@ -290,11 +290,13 @@ class ChannelContextMenu(Screen):
 		self["menu"] = ChoiceList(menu)
 
 	def playMain(self):
-		# XXX: we want to keep the current selection
 		sel = self.csel.getCurrentSelection()
-		self.csel.zap()
-		self.csel.setCurrentSelection(sel)
-		self.close()
+		if sel and sel.valid() and self.csel.dopipzap and (not self.parentalControlEnabled or self.parentalControl.getProtectionLevel(self.csel.getCurrentSelection().toCompareString()) == -1):
+			self.csel.zap()
+			self.csel.setCurrentSelection(sel)
+			self.close(True)
+		else:
+			return 0
 
 	def okbuttonClick(self):
 		self["menu"].getCurrent()[0][1]()
@@ -695,13 +697,17 @@ class ChannelSelectionEPG:
 			sely = int(sely) - int(self.listHeight)
 		menu1 = _("Record now")
 		menu2 = _("Record next")
+		menu3 = _("Zap next")
 		for timer in self.session.nav.RecordTimer.timer_list:
 			if timer.eit == eventid and ':'.join(timer.service_ref.ref.toString().split(':')[:11]) == refstr:
 				menu1 = _("Stop recording now")
 			elif timer.eit == eventidnext and ':'.join(timer.service_ref.ref.toString().split(':')[:11]) == refstr:
 				menu2 = _("Change next timer")
-		menu = [(menu1, 'CALLFUNC', self.ChoiceBoxCB, self.doRecordCurrentTimer), (menu2, 'CALLFUNC', self.ChoiceBoxCB, self.doRecordNextTimer)]
-		self.ChoiceBoxDialog = self.session.instantiateDialog(ChoiceBox, list=menu, keys=['red', 'green'], skin_name="RecordTimerQuestion")
+		menu = [(menu1, 'CALLFUNC', self.ChoiceBoxCB, self.doRecordCurrentTimer),
+				(menu2, 'CALLFUNC', self.ChoiceBoxCB, self.doRecordNextTimer),
+				(menu3, 'CALLFUNC', self.ChoiceBoxCB, self.doZapTimer)
+				]
+		self.ChoiceBoxDialog = self.session.instantiateDialog(ChoiceBox, list=menu, keys=['red', 'green', 'yellow'], skin_name="RecordTimerQuestion")
 		self.ChoiceBoxDialog.instance.move(ePoint(selx-self.ChoiceBoxDialog.instance.size().width(),self.instance.position().y()+sely))
 		self.showChoiceBoxDialog()
 
@@ -2268,6 +2274,20 @@ class ChannelSelection(ChannelSelectionBase, ChannelSelectionEdit, ChannelSelect
 		for x in self.history:
 			info = serviceHandler.info(x[-1])
 			if info: historylist.append((info.getName(x[-1]), x[-1]))
+		self.session.openWithCallback(self.historyMenuClosed, HistoryZapSelector, historylist, selpos, mark, invert_items=True, redirect_buttons=True, wrap_around=True)
+
+	def historyZapMenu(self, direction):
+		hlen = len(self.history)
+		if hlen < 1: return
+		mark = self.history_pos
+		selpos = self.history_pos
+		if selpos < 0: selpos = 0
+		if selpos > hlen: selpos = hlen
+		serviceHandler = eServiceCenter.getInstance()
+		historylist = [ ]
+		for x in self.history:
+			info = serviceHandler.info(x[-1])
+			if info: historylist.append((info.getName(x[-1])))
 		self.session.openWithCallback(self.historyMenuClosed, HistoryZapSelector, historylist, selpos, mark, invert_items=True, redirect_buttons=True, wrap_around=True)
 
 	def historyMenuClosed(self, retval):

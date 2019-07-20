@@ -151,7 +151,7 @@ class AudioSelection(Screen, ConfigListScreen):
 					choice_list = [("downmix", _("Downmix")), ("passthrough", _("Passthrough")), ("force_ac3", _("convert to AC3")), ("multichannel",  _("convert to multi-channel PCM")), ("force_dts",  _("convert to DTS"))]
 					self.settings.transcodeac3plus = ConfigSelection(choices = choice_list, default = config.av.transcodeac3plus.value)
 				else:
-					choice_list = [("use_hdmi_caps", _("controlled by HDMI")), ("force_ac3", _("always"))]
+					choice_list = [("use_hdmi_caps", _("controlled by HDMI")), ("force_ac3", _("convert to AC3"))]
 				self.settings.transcodeac3plus = ConfigSelection(choices = choice_list, default = config.av.transcodeac3plus.value)
 				self.settings.transcodeac3plus.addNotifier(self.setAC3plusTranscode, initial_call = False)
 				conflist.append(getConfigListEntry(_("AC3plus transcoding"), self.settings.transcodeac3plus, None))
@@ -179,6 +179,12 @@ class AudioSelection(Screen, ConfigListScreen):
 				self.settings.wmapro = ConfigSelection(choices = choice_list, default = config.av.wmapro.value)
 				self.settings.wmapro.addNotifier(self.setWMAPro, initial_call = False)
 				conflist.append(getConfigListEntry(_("WMA Pro downmix"), self.settings.wmapro, None))
+
+			if SystemInfo["CanBTAudio"]:
+				choice_list = [("off", _("off")), ("on", _("on"))]
+				self.settings.btaudio = ConfigSelection(choices = choice_list, default = config.av.btaudio.value)
+				self.settings.btaudio.addNotifier(self.changeBTAudio, initial_call = False)
+				conflist.append(getConfigListEntry(_("Enable BT Audio"), self.settings.btaudio, None))
 
 			if n > 0:
 				self.audioChannel = service.audioChannel()
@@ -368,6 +374,11 @@ class AudioSelection(Screen, ConfigListScreen):
 		if SystemInfo["supportPcmMultichannel"]:
 			config.av.pcm_multichannel.save()
 		self.fillList()
+
+	def changeBTAudio(self, btaudio):
+		if btaudio.value:
+			config.av.btaudio.value = btaudio.value
+		config.av.btaudio.save()
 
 	def changePCMMultichannel(self, multichan):
 		if getBoxType() in ('dm900', 'dm920', 'dm7080', 'dm800'):
@@ -589,12 +600,13 @@ class QuickSubtitlesConfigMenu(ConfigListScreen, Screen):
 		elif sub[0] == 1: # teletext
 			menu = [
 				getConfigMenuItem("config.subtitles.ttx_subtitle_colors"),
+				getConfigMenuItem("config.subtitles.subtitle_borderwidth"),
+				getConfigMenuItem("config.subtitles.subtitles_backtrans"),
 				getConfigMenuItem("config.subtitles.ttx_subtitle_original_position"),
 				getConfigMenuItem("config.subtitles.subtitle_fontsize"),
 				getConfigMenuItem("config.subtitles.subtitle_position"),
-				getConfigMenuItem("config.subtitles.subtitle_rewrap"),
-				getConfigMenuItem("config.subtitles.subtitle_borderwidth"),
 				getConfigMenuItem("config.subtitles.subtitle_alignment"),
+				getConfigMenuItem("config.subtitles.subtitle_rewrap"),
 				getConfigMenuItem("config.subtitles.subtitle_bad_timing_delay"),
 				getConfigMenuItem("config.subtitles.subtitle_noPTSrecordingdelay"),
 			]
@@ -602,6 +614,8 @@ class QuickSubtitlesConfigMenu(ConfigListScreen, Screen):
 			menu = [
 				getConfigMenuItem("config.subtitles.pango_subtitles_delay"),
 				getConfigMenuItem("config.subtitles.pango_subtitle_colors"),
+				getConfigMenuItem("config.subtitles.subtitle_borderwidth"),
+				getConfigMenuItem("config.subtitles.subtitles_backtrans"),
 				getConfigMenuItem("config.subtitles.pango_subtitle_fontswitch"),
 				getConfigMenuItem("config.subtitles.colourise_dialogs"),
 				getConfigMenuItem("config.subtitles.subtitle_fontsize"),
@@ -609,7 +623,6 @@ class QuickSubtitlesConfigMenu(ConfigListScreen, Screen):
 				getConfigMenuItem("config.subtitles.subtitle_alignment"),
 				getConfigMenuItem("config.subtitles.subtitle_rewrap"),
 				getConfigMenuItem("config.subtitles.pango_subtitle_removehi"),
-				getConfigMenuItem("config.subtitles.subtitle_borderwidth"),
 				getConfigMenuItem("config.subtitles.pango_subtitles_fps"),
 			]
 			self["videofps"].setText(_("Video: %s fps") % (self.getFps().rstrip(".000")))

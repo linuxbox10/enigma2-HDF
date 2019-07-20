@@ -21,8 +21,8 @@ if not os.path.exists("/usr/share/enigma2/skin_text.xml"):
 	config.vfd.show = ConfigNothing()
 
 colorNames = {}
-switchPixmap = {}
 colorNamesHuman = {}
+switchPixmap = {}
 # Predefined fonts, typically used in built-in screens and for components like
 # the movie list and so.
 fonts = {
@@ -184,17 +184,32 @@ except:
 
 addSkin('skin_subtitles.xml')
 
+if config.skin.primary_skin.value != DEFAULT_SKIN:
+	skinpath = resolveFilename(SCOPE_SKIN, primary_skin_path)
+	if os.path.isdir(skinpath):
+		for file in sorted(os.listdir(skinpath)):
+			if file.startswith('skin_user_') and file.endswith('.xml'):
+				try:
+					addSkin(primary_skin_path + file, SCOPE_SKIN)
+					print "[SKIN] loading user defined %s skin file: %s" %(file.replace('skin_user_','')[:-4], primary_skin_path + file)
+				except (SkinError, IOError, OSError, AssertionError), err:
+					print "[SKIN] not loading user defined %s skin file: %s - error: %s" %(file.replace('skin_user_','')[:-4], primary_skin_path + file, err)
+
+'''
 try:
-	addSkin(primary_skin_path + 'skin_user_colors.xml', SCOPE_SKIN)
-	print "[SKIN] loading user defined colors for skin", (primary_skin_path + 'skin_user_colors.xml')
+	if config.skin.primary_skin.value != DEFAULT_SKIN:
+		addSkin(primary_skin_path + 'skin_user_colors.xml', SCOPE_SKIN)
+		print "[SKIN] loading user defined colors for skin", (primary_skin_path + 'skin_user_colors.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined colors for skin"
 
 try:
-	addSkin(primary_skin_path + 'skin_user_header.xml', SCOPE_SKIN)
-	print "[SKIN] loading user defined header file for skin", (primary_skin_path + 'skin_user_header.xml')
+	if config.skin.primary_skin.value != DEFAULT_SKIN:
+		addSkin(primary_skin_path + 'skin_user_header.xml', SCOPE_SKIN)
+		print "[SKIN] loading user defined header file for skin", (primary_skin_path + 'skin_user_header.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined header file for skin"
+'''
 
 def load_modular_files():
 	modular_files = get_modular_files(primary_skin_path, SCOPE_SKIN)
@@ -743,7 +758,7 @@ def loadSingleSkinData(desktop, skin, path_prefix):
 				raise SkinError('[Skin] pixmap needs filename attribute')
 			resolved_png = resolveFilename(SCOPE_ACTIVE_SKIN, filename, path_prefix=path_prefix)
 			if fileExists(resolved_png):
-				switchPixmap[name] = resolved_png
+				switchPixmap[name] = LoadPixmap(resolved_png, cached=True)
 			else:
 				raise SkinError('[Skin] switchpixmap pixmap filename="%s" (%s) not found' % (filename, resolved_png))
 
@@ -785,8 +800,8 @@ def loadSingleSkinData(desktop, skin, path_prefix):
 			resolved_font = resolveFilename(SCOPE_FONTS, filename, path_prefix=path_prefix)
 			if not fileExists(resolved_font): #when font is not available look at current skin path
 				resolved_font = resolveFilename(SCOPE_ACTIVE_SKIN, filename)
-				if fileExists(resolveFilename(SCOPE_ACTIVE_SKIN, filename)):
-					resolved_font = resolveFilename(SCOPE_ACTIVE_SKIN, filename)
+				if fileExists(resolveFilename(SCOPE_CURRENT_SKIN, filename)):
+					resolved_font = resolveFilename(SCOPE_CURRENT_SKIN, filename)
 				elif fileExists(resolveFilename(SCOPE_ACTIVE_LCDSKIN, filename)):
 					resolved_font = resolveFilename(SCOPE_ACTIVE_LCDSKIN, filename)
 			addFont(resolved_font, name, scale, is_replacement, render)

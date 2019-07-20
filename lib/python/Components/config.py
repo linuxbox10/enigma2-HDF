@@ -319,9 +319,10 @@ class descriptionList(choicesList): # XXX: we might want a better name for this
 # all ids MUST be plain strings.
 #
 class ConfigSelection(ConfigElement):
-	def __init__(self, choices, default = None):
+	def __init__(self, choices, default = None, graphic=True):
 		ConfigElement.__init__(self)
 		self.choices = choicesList(choices)
+		self.graphic = graphic
 
 		if default is None:
 			default = self.choices.default()
@@ -386,21 +387,20 @@ class ConfigSelection(ConfigElement):
 		self.value = self.choices[(i + 1) % nchoices]
 
 	def getText(self):
-		if self._descr is not None:
-			return self._descr
-		descr = self._descr = self.description[self.value]
-		if descr:
-			return _(descr)
-		return descr
+		if self._descr is None:
+			self._descr = self.description[self.value]
+		return self._descr
 
 	def getMulti(self, selected):
-		if self._descr is not None:
-			descr = self._descr
-		else:
-			descr = self._descr = self.description[self.value]
-		if descr:
-			return "text", _(descr)
-		return "text", descr
+		from config import config
+		from skin import switchPixmap
+		if self._descr is None:
+			self._descr = self.description[self.value]
+		keywords_true = (_('True'),_('Yes'),_('Enabled'),_('On'))
+		keywords_false = (_('False'),_('No'),_('Disabled'),_('Off'))
+		if self._descr in (keywords_true + keywords_false) and self.graphic and config.usage.boolean_graphic.value and switchPixmap.get("menu_on", False) and switchPixmap.get("menu_off", False):
+			return ('pixmap', self._descr in keywords_true and switchPixmap["menu_on"] or switchPixmap["menu_off"])
+		return ("text", self._descr)
 
 	# HTML
 	def getHTML(self, id):
@@ -430,18 +430,7 @@ class ConfigBoolean(ConfigElement):
 		ConfigElement.__init__(self)
 		self.descriptions = descriptions
 		self.value = self.last_value = self.default = default
-		self.graphic = False
-		if graphic:
-			from skin import switchPixmap
-			offPath = switchPixmap.get('menu_off')
-			onPath = switchPixmap.get('menu_on')
-			if offPath and onPath:
-				falseIcon = LoadPixmap(offPath, cached=True)
-				trueIcon = LoadPixmap(onPath, cached=True)
-				if falseIcon and trueIcon:
-					self.falseIcon = falseIcon
-					self.trueIcon = trueIcon
-					self.graphic = True
+		self.graphic = graphic
 
 	def handleKey(self, key):
 		if key in (KEY_LEFT, KEY_RIGHT):
@@ -452,18 +441,13 @@ class ConfigBoolean(ConfigElement):
 			self.value = True
 
 	def getText(self):
-		descr = self.descriptions[self.value]
-		if descr:
-			return _(descr)
-		return descr
+		return self.descriptions[self.value]
 
 	def getMulti(self, selected):
 		from config import config
-		if self.graphic and config.usage.boolean_graphic.value:
-			if self.value:
-				return ('pixmap', self.trueIcon)
-			else:
-				return ('pixmap', self.falseIcon)
+		from skin import switchPixmap
+		if self.graphic and config.usage.boolean_graphic.value and switchPixmap.get("menu_on", False) and switchPixmap.get("menu_off", False):
+			return ('pixmap', self.value and switchPixmap["menu_on"] or switchPixmap["menu_off"])
 		else:
 			return ("text", self.descriptions[self.value])
 
@@ -499,16 +483,16 @@ class ConfigBoolean(ConfigElement):
 			self.last_value = self.value
 
 class ConfigYesNo(ConfigBoolean):
-	def __init__(self, default = False, graphic = True):
-		ConfigBoolean.__init__(self, default = default, descriptions = {False: _("no"), True: _("yes")}, graphic = graphic)
+	def __init__(self, default = False):
+		ConfigBoolean.__init__(self, default = default, descriptions = {False: _("no"), True: _("yes")})
 
 class ConfigOnOff(ConfigBoolean):
-	def __init__(self, default = False, graphic = True):
-		ConfigBoolean.__init__(self, default = default, descriptions = {False: _("off"), True: _("on")}, graphic = graphic)
+	def __init__(self, default = False):
+		ConfigBoolean.__init__(self, default = default, descriptions = {False: _("off"), True: _("on")})
 
 class ConfigEnableDisable(ConfigBoolean):
-	def __init__(self, default = False, graphic = True):
-		ConfigBoolean.__init__(self, default = default, descriptions = {False: _("disable"), True: _("enable")}, graphic = graphic)
+	def __init__(self, default = False):
+		ConfigBoolean.__init__(self, default = default, descriptions = {False: _("disable"), True: _("enable")})
 
 class ConfigDateTime(ConfigElement):
 	def __init__(self, default, formatstring, increment = 86400):
@@ -1000,6 +984,15 @@ class ConfigFloat(ConfigSequence):
 		return float(self.value[1] / float(self.limits[1][1] + 1) + self.value[0])
 
 	float = property(getFloat)
+
+	def getFloatInt(self):
+		return int(self.value[0] * float(self.limits[1][1] + 1) + self.value[1])
+
+	def setFloatInt(self, val):
+		self.value[0] = val / float(self.limits[1][1] + 1)
+		self.value[1] = val % float(self.limits[1][1] + 1)
+
+	floatint = property(getFloatInt, setFloatInt)
 
 # an editable text...
 class ConfigText(ConfigElement, NumericalTextInput):
@@ -1515,6 +1508,7 @@ class ConfigSet(ConfigElement):
 
 	description = property(lambda self: descriptionList(self.choices.choices, choicesList.LIST_TYPE_LIST))
 
+
 class ConfigDictionarySet(ConfigElement):
 	def __init__(self, default = {}):
 		ConfigElement.__init__(self)
@@ -1944,6 +1938,7 @@ class Config(ConfigSubsection):
 			(name, val) = result
 			val = val.strip()
 
+			'''
 			#convert old settings
 			if l.startswith("config.Nims."):
 				tmp = name.split('.')
@@ -1953,10 +1948,11 @@ class Config(ConfigSubsection):
 					tmp[3] = "dvbc." + tmp[3]
 				elif tmp[3].startswith("terrestrial"):
 					tmp[3] = "dvbt." + tmp[3]
-				else:
-					if tmp[3] not in ('dvbs', 'dvbc', 'dvbt', 'multiType'):
-						tmp[3] = "dvbs." + tmp[3]
+				#else:
+				#	if tmp[3] not in ('dvbs', 'dvbc', 'dvbt', 'multiType'):
+				#		tmp[3] = "dvbs." + tmp[3]
 				name =".".join(tmp)
+			'''
 
 			names = name.split('.')
 
@@ -2029,8 +2025,8 @@ class ConfigFile:
 		names = key.split('.')
 		if len(names) > 1:
 			if names[0] == "config":
-				ret=self.__resolveValue(names[1:], config.content.items)
-				if ret and len(ret):
+				ret = self.__resolveValue(names[1:], config.content.items)
+				if ret and len(ret) or ret == "":
 					return ret
 		print "getResolvedKey", key, "failed !! (Typo??)"
 		return ""
@@ -2154,3 +2150,15 @@ class ConfigCECAddress(ConfigSequence):
 	def getHTML(self, id):
 		# we definitely don't want leading zeros
 		return '.'.join(["%d" % d for d in self.value])
+
+class ConfigAction(ConfigElement):
+	def __init__(self, action, *args):
+		ConfigElement.__init__(self)
+		self.value = "(OK)"
+		self.action = action
+		self.actionargs = args
+	def handleKey(self, key):
+		if (key == KEY_OK):
+			self.action(*self.actionargs)
+	def getMulti(self, dummy):
+		pass

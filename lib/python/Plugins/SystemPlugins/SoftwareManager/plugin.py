@@ -14,6 +14,7 @@ from Components.Pixmap import Pixmap
 from Components.MenuList import MenuList
 from Components.Sources.List import List
 from Components.Slider import Slider
+from Components.SystemInfo import SystemInfo
 from Components.Harddisk import harddiskmanager
 from Components.config import config,getConfigListEntry, ConfigSubsection, ConfigText, ConfigLocations, ConfigYesNo, ConfigSelection
 from Components.ConfigList import ConfigListScreen
@@ -41,6 +42,7 @@ from twisted.internet import reactor
 from ImageBackup import ImageBackup
 from Flash_online import FlashOnline
 from ImageWizard import ImageWizard
+from Multibootmgr import MultiBootWizard
 from BackupRestore import BackupSelection, RestoreMenu, BackupScreen, RestoreScreen, getBackupPath, getOldBackupPath, getBackupFilename
 from SoftwareTools import iSoftwareTools
 import os
@@ -79,9 +81,9 @@ if boxtype == "odinm9" or boxtype == "maram9":
 	config.plugins.configurationbackup.backuplocation = ConfigText(default = '/media/backup/', visible_width = 50, fixed_size = False)
 else:
 	config.plugins.configurationbackup.backuplocation = ConfigText(default = '/media/hdd/', visible_width = 50, fixed_size = False)
-config.plugins.configurationbackup.backupdirs = ConfigLocations(default=[eEnv.resolve('${sysconfdir}/enigma2/'), '/etc/CCcam.cfg', '/etc/CCcam.prio', '/usr/keys/', '/usr/scripts/', '/etc/tuxbox/config/', '/var/tuxbox/config/',
+config.plugins.configurationbackup.backupdirs = ConfigLocations(default=[eEnv.resolve('${sysconfdir}/enigma2/'), '/etc/CCcam.cfg', '/etc/CCcam.prio', '/usr/keys/', '/usr/scripts/', '/etc/tuxbox/config/', '/var/tuxbox/config/', '/etc/model',
 																			'/etc/auto.network', '/etc/default/dropbear', '/home/root/', '/etc/samba/', '/etc/fstab', '/etc/inadyn.conf', '/etc/ConfFS/', '/etc/enigma2/ci_auth_slot_0.bin', '/etc/enigma2/ci_auth_slot_1.bin',
-																			'/etc/network/interfaces', '/etc/wpa_supplicant.conf', '/etc/default_gw', '/etc/wpa_supplicant.ath0.conf', '/etc/dropbear/', '/etc/volume.xml', '/etc/cron/crontabs/root',
+																			'/etc/network/interfaces', '/etc/wpa_supplicant.conf', '/etc/default_gw', '/etc/wpa_supplicant.ath0.conf', '/etc/dropbear/', '/etc/volume.xml', '/etc/cron/crontabs/root', '/etc/vtuner.conf',
 																			'/etc/wpa_supplicant.wlan0.conf', '/etc/wpa_supplicant.wlan1.conf', '/etc/resolv.conf', '/etc/hostname', '/usr/share/enigma2/XionHDF/skin.xml', '/etc/xmltvimport', '/etc/ava_volume.cfg', '/etc/ava_setup.cfg',
 																			'/etc/openvpn/', '/etc/ipsec.conf', '/etc/ipsec.secrets', '/etc/ipsec.user', '/etc/strongswan.conf', '/usr/lib/enigma2/python/Plugins/Extensions/VMC/DB/', '/usr/lib/enigma2/python/Plugins/Extensions/VMC/youtv.pwd',
 																			'/usr/lib/enigma2/python/Plugins/Extensions/VMC/vod.config', '/usr/lib/enigma2/python/Plugins/Extensions/MP3Browser/db', '/usr/lib/enigma2/python/Plugins/Extensions/MovieBrowser/db', '/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/db',
@@ -91,6 +93,7 @@ config.plugins.configurationbackup.backupdirs = ConfigLocations(default=[eEnv.re
 																			+eEnv_resolve_multi('/etc/*.emu')\
 																			+eEnv_resolve_multi('/etc/init.d/softcam*')\
 																			+eEnv_resolve_multi('/etc/init.d/cardserver*'))
+
 config.plugins.softwaremanager = ConfigSubsection()
 config.plugins.softwaremanager.overwriteSettingsFiles = ConfigYesNo(default=False)
 config.plugins.softwaremanager.autosaveSettingsfilesEntry = ConfigYesNo(default=False)
@@ -201,15 +204,17 @@ class UpdatePluginMenu(Screen):
 		self.backupdirs = ' '.join( config.plugins.configurationbackup.backupdirs.value )
 		if self.menu == 0:
 			print "building menu entries"
-			self.list.append(("software-update", _("Software update"), _("\nOnline update of your %s %s software.") % (getMachineBrand(), getMachineName()) + self.oktext, None))
-			self.list.append(("software-restore", _("Software restore"), _("\nRestore your %s %s with a new firmware.") % (getMachineBrand(), getMachineName()) + self.oktext, None))
-			self.list.append(("install-extensions", _("Manage extensions"), _("\nManage extensions or plugins for your %s %s") % (getMachineBrand(), getMachineName()) + self.oktext, None))
-			self.list.append(("backup-image", _("Image Full-Backup"), _("\nBackup your running %s %s image to HDD or USB.") % (getMachineBrand(), getMachineName()) + self.oktext, None))
-			if not boxtype.startswith('az') and not boxtype in ('dm500hd','dm500hdv2','dm900','dm800','dm800se','dm800sev2','dm7020hd','dm7020hdv2','dm8000') and not brandoem.startswith('cube') and not brandoem.startswith('wetek'):
-				self.list.append(("flash-online", _("Image Online-Flash"), _("\nFlash on the fly your %s %s.") % (getMachineBrand(), getMachineName()) + self.oktext, None))
-			self.list.append(("system-backup", _("Backup system settings"), _("\nBackup your %s %s settings.") % (getMachineBrand(), getMachineName()) + self.oktext + "\n\n" + self.infotext, None))
-			self.list.append(("system-restore",_("Restore system settings"), _("\nRestore your %s %s settings.") % (getMachineBrand(), getMachineName()) + self.oktext, None))
-			self.list.append(("ipkg-install", _("Install local extension"),  _("\nScan for local extensions and install them.") + self.oktext, None))
+			self.list.append(("software-update", _("Software update"), _("\nOnline update of your %s %s software.") % (getMachineBrand(), getMachineName()) + "\n" + self.oktext, None))
+			self.list.append(("software-restore", _("Software restore"), _("\nRestore your %s %s with a new firmware.") % (getMachineBrand(), getMachineName()) + "\n" + self.oktext, None))
+			self.list.append(("install-extensions", _("Manage extensions"), _("\nManage extensions or plugins for your %s %s") % (getMachineBrand(), getMachineName()) + "\n" + self.oktext, None))
+			self.list.append(("backup-image", _("Image Full-Backup"), _("\nBackup your running %s %s image to HDD or USB.") % (getMachineBrand(), getMachineName()) + "\n" + self.oktext, None))
+			if not boxtype.startswith('az') and not boxtype in ('dm500hd','dm500hdv2','dm520','dm800','dm800se','dm800sev2','dm820','dm7020hd','dm7020hdv2','dm7080','dm8000') and not brandoem.startswith('cube') and not brandoem.startswith('wetek') and not boxtype.startswith('alien'):
+				self.list.append(("flash-online", _("Image Online-Flash"), _("\nFlash on the fly your %s %s.") % (getMachineBrand(), getMachineName()) + "\n" + self.oktext, None))
+			if SystemInfo["canMultiBoot"]:
+				self.list.append(("multiboot-manager", _("Image Multiboot Manager"), _("\nMaintain your %s %s device.") % (getMachineBrand(), getMachineName()) + "\n" + self.oktext, None))
+			self.list.append(("system-backup", _("Backup system settings"), _("\nBackup your %s %s settings.") % (getMachineBrand(), getMachineName()) + "\n" + self.oktext, None))
+			self.list.append(("system-restore",_("Restore system settings"), _("\nRestore your %s %s settings.") % (getMachineBrand(), getMachineName()) + "\n" + self.oktext, None))
+			self.list.append(("ipkg-install", _("Install local extension"),  _("\nScan for local extensions and install them.") + "\n" + self.oktext, None))
 			for p in plugins.getPlugins(PluginDescriptor.WHERE_SOFTWAREMANAGER):
 				if p.__call__.has_key("SoftwareSupported"):
 					callFnc = p.__call__["SoftwareSupported"](None)
@@ -224,16 +229,16 @@ class UpdatePluginMenu(Screen):
 							menuEntryDescription = _('Extended Software Plugin')
 						self.list.append(('default-plugin', menuEntryName, menuEntryDescription + self.oktext, callFnc))
 			if config.usage.setup_level.index >= 2: # expert+
-				self.list.append(("advanced", _("Advanced options"), _("\nAdvanced options and settings." ) + self.oktext, None))
+				self.list.append(("advanced", _("Advanced options"), _("\nAdvanced options and settings." ) + "\n" + self.oktext, None))
 		elif self.menu == 1:
-			self.list.append(("advancedrestore", _("Advanced restore"), _("\nRestore your backups by date." ) + self.oktext, None))
-			self.list.append(("backuplocation", _("Select backup location"),  _("\nSelect your backup device.\nCurrent device: " ) + config.plugins.configurationbackup.backuplocation.value + self.oktext, None))
-			self.list.append(("backupfiles", _("Select backup files"),  _("Select files for backup.") + self.oktext + "\n\n" + self.infotext, None))
-			self.list.append(("resetbackupfiles",_("Set backupfiles to defaults"), _("\nReset selection of files for backup to default." ) + self.oktext, None))
-			self.list.append(("autorestorebackup",_("Restore settings backup after restart"), _("\nRestore automatically your saved settings after Enigma restart." ) + self.oktext, None))
+			self.list.append(("advancedrestore", _("Advanced restore"), _("\nRestore your backups by date." ) + "\n" + self.oktext, None))
+			self.list.append(("backuplocation", _("Select backup location"),  _("\nSelect your backup device.\nCurrent device: " ) + config.plugins.configurationbackup.backuplocation.value + "\n" + self.oktext, None))
+			self.list.append(("backupfiles", _("Select backup files"),  _("\nSelect files for backup.") + "\n" + self.oktext, None))
+			self.list.append(("resetbackupfiles",_("Set backupfiles to defaults"), _("\nReset selection of files for backup to default." ) + "\n" + self.oktext, None))
+			self.list.append(("autorestorebackup",_("Restore settings backup after restart"), _("\nRestore automatically your saved settings after Enigma restart.\nWhen selected, the last backup of the settings for the box is used.\nWhen restarting Enigma2, a restore will be displayed on the screen." ) + "\n" + self.oktext, None))
 			if config.usage.setup_level.index >= 2: # expert+
-				self.list.append(("ipkg-manager", _("Packet management"),  _("\nView, install and remove available or installed packages." ) + self.oktext, None))
-			self.list.append(("ipkg-source",_("Select upgrade source"), _("\nEdit the upgrade source address." ) + self.oktext, None))
+				self.list.append(("ipkg-manager", _("Packet management"),  _("\nView, install and remove available or installed packages." ) + "\n" + self.oktext, None))
+			self.list.append(("ipkg-source",_("Select upgrade source"), _("\nEdit the upgrade source address." ) + "\n" + self.oktext, None))
 			for p in plugins.getPlugins(PluginDescriptor.WHERE_SOFTWAREMANAGER):
 				if p.__call__.has_key("AdvancedSoftwareSupported"):
 					callFnc = p.__call__["AdvancedSoftwareSupported"](None)
@@ -380,6 +385,8 @@ class UpdatePluginMenu(Screen):
 						self.session.open(FlashOnline)
 					else:
 						self.session.openWithCallback(self.doBackup, MessageBox, _("Do you want to backup your image and settings before?"), default = True)
+				elif (currentEntry == "multiboot-manager"):
+					self.session.open(MultiBootWizard)
 				elif (currentEntry == "backup-image"):
 					if DFLASH == True:
 						self.session.open(dFlash)
@@ -446,9 +453,12 @@ class UpdatePluginMenu(Screen):
 				backupdestfile = '/media/hdd/images/hdfrestore'
 				if not os.path.exists(backupsourcefile):
 					print "AfterFlashAction: No settings found."
+					self.session.open(MessageBox, _("Please create a backup of your settings before."), MessageBox.TYPE_INFO, timeout = 20)
 				else:
 					shutil.copyfile(backupsourcefile, backupdestfile)
-					self.session.open(MessageBox, _("Please restart Enigma now to restore your settings."), MessageBox.TYPE_INFO, timeout = 10)
+					os.system("cp /usr/share/enigma2/defaults/settings /etc/enigma2/")
+					message = _("Enigma must be restarted to auto restore your saved settings now!")
+					self.session.openWithCallback(self.initEnigmaGUI,MessageBox, message, MessageBox.TYPE_INFO, timeout=10)
 			except:
 				print "AfterFlashAction: failed to create /media/hdd/images/hdfrestore"
 		else:
@@ -459,6 +469,12 @@ class UpdatePluginMenu(Screen):
 			except:
 				print "AfterFlashAction: failed to delete /media/hdd/images/hdfrestore"
 		self.close()
+
+	def initEnigmaGUI(self, answer):
+		if answer is True:
+			os.system("killall -9 enigma2")
+		else:
+			self.close()
 
 	def backupfiles_choosen(self, ret):
 		self.backupdirs = ' '.join( config.plugins.configurationbackup.backupdirs.value )
@@ -1644,6 +1660,9 @@ class UpdatePlugin(Screen):
 
 		self.activityTimer.start(100, False)
 
+		if os.path.exists('/etc/enigma2/xionrestore'):
+			os.unlink('/etc/enigma2/xionrestore')
+
 	def CheckDate(self):
 		# Check if image is not to old for update (max 60days)
 		self.CheckDateDone = True
@@ -1731,11 +1750,11 @@ class UpdatePlugin(Screen):
 			os.system("opkg list-upgradable > /etc/last-upgrades-git.log")
 			if not os.system("grep 'skins-xionhdf' /etc/last-upgrades-git.log"):
 				print "Xion skin update = Yes"
-				open('/media/hdd/images/xionrestore','w').close()
+				open('/etc/enigma2/xionrestore','w').close()
 			else:
 				print "Xion skin update = No"
-				if os.path.exists('/media/hdd/images/hdfrestore'):
-					os.unlink('/media/hdd/images/xionrestore')
+				if os.path.exists('/etc/enigma2/xionrestore'):
+					os.unlink('/etc/enigma2/xionrestore')
 			if os.system("grep 'dvb-module\|kernel-module\|platform-util' /etc/last-upgrades-git.log"):
 				print "Upgrade asap = Yes"
 				self.ipkg.startCmd(IpkgComponent.CMD_UPGRADE_LIST)

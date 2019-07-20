@@ -8,6 +8,22 @@ from SystemInfo import SystemInfo
 import os
 from time import sleep
 
+has_scart = False
+has_scartyuv = False
+has_yuv = False
+has_dvi = False
+has_hdmi = False
+has_rca = False
+has_avjack = False
+
+has_scart = SystemInfo["HaveSCART"]
+has_scartyuv = SystemInfo["HaveSCARTYUV"]
+has_yuv = SystemInfo["HaveYUV"]
+has_dvi = SystemInfo["HaveDVI"]
+has_hdmi = SystemInfo["HaveHDMI"]
+has_rca = SystemInfo["HaveRCA"]
+has_avjack = SystemInfo["HaveAVJACK"]
+
 config.av = ConfigSubsection()
 if getBrandOEM() in ('azbox'):
 	config.av.edid_override = ConfigYesNo(default = True)
@@ -105,17 +121,17 @@ class AVSwitch:
 		widescreen_modes = {"720p", "1080i"}
 
 	modes["YPbPr"] = modes["HDMI"]
-	if getBoxType() in ('dm500hd', 'dm800', 'vuuno', 'vusolo', 'vusolo2', 'vuultimo', 'vuduo', 'vuduo2'):
+	if has_scartyuv:
 		modes["Scart-YPbPr"] = modes["HDMI"]
+	if modes.has_key("YPbPr") and not has_yuv:
+		del modes["YPbPr"]
+	if modes.has_key("Scart") and not has_scart and not has_rca and not has_avjack:
+			del modes["Scart"]
 
 	# if modes.has_key("DVI-PC") and not getModeList("DVI-PC"):
 	# 	print "[AVSwitch] remove DVI-PC because of not existing modes"
 	# 	del modes["DVI-PC"]
-	if modes.has_key("YPbPr") and getBoxType() in ('sf8008','axashis4kcombo','axashis4kcomboplus','dinobot4kplus','dinobot4kmini','zgemmah9t','zgemmah9s','zgemmah9splus','vuzero4k','vuuno4kse','anadol4k','mediabox4k','dinobot4kl','dinobot4k','dinobot4kse','lunix','purehdse','lunix34k','sf5008','et13000','zgemmah6','vipert2c','vipercombo','vipercombohdd','e4hdultra','evoslimse','evoslimt2c','beyonwizu4','zgemmah4','osninopro','osnino','osninoplus','axultra','gbue4k','spycat4kcombo','spycat4k','valalinux','formuler4ip','formuler3ip','tm4ksuper','galaxy4k','zgemmah52splus','zgemmah2splus','zgemmah7','zgemmah32tc','zgemmah52tc','alphatriple','gi11000','spycat4kmini','tmtwin4k','tmnanom3','tiviarmin','vimastec1000','vimastec1500', 'gbquad4k','revo4k','force3uhdplus','force3uhd','force2nano','evoslim','zgemmah5ac', 'zgemmah3ac', 'bre2zet2c', 'dm900', 'dm920', 'wetekplay', 'wetekplay2', 'wetekhub', 'bre2ze4k', 'vuuno4k', 'vuultimo4k', 'sf4008', 'e4hdcombo', 'ultrabox', 'osmega', 'tmnano3t', 'novaip', 'novacombo', 'novatwin', 'dm520', 'dm525', 'megaforce2', 'purehd', 'sf128', 'sf138', 'mutant11', 'xpeedlxpro', 'mbtwinplus', 'mutant51', 'ax51', 'twinboxlcdci5' , 'twinboxlcdci', 'singleboxlcd', 'formuler4', 'formuler4turbo', 'zgemmah5', 'zgemmah52s', 'zgemmai55', 'sf98', 'odinplus', 'zgemmaslc', '9900lx', '9910lx', '9911lx', 'vusolo4k', 'et7x00mini', 'evomini', 'evominiplus', 'zgemmahs', 'zgemmah2s', 'zgemmah2h', 't2cable', 'xpeedlxcs2', 'xpeedlxcc', 'osmini', 'osminiplus', 'gbx1', 'gbx2', 'gbx3', 'gbx3h', 'sf3038', 'spycat', 'bwidowx', 'bwidowx2', 'fegasusx3', 'fegasusx5s', 'fegasusx5t', 'force2', 'force2plus', 'force2plushv', 'optimussos', 'tmnanose', 'tmnanosem2', 'tmnanosem2plus', 'tmnanocombo', 'zgemmash1', 'zgemmash2', 'zgemmas2s', 'zgemmass', 'mago', 'enibox', 'sf108', 'x1plus', 'xcombo', 'mutant1100', 'mutant1200', 'mutant1265', 'mutant1500', 'mutant500c', 'mutant530c', 'et4x00', 'et7500', 'et7000', 'et7100', 'et8500', 'et8500s', 'xp1000mk', 'xp1000max', 'xp1000plus', 'sf8', 'tm2t', 'tmsingle', 'vusolo2', 'tmnano', 'iqonios300hd', 'iqonios300hdv2', 'classm', 'axodin', 'axodinc', 'genius', 'evo', 'galaxym6', 'geniuse3hd', 'evoe3hd', 'axase3', 'axase3c', 'dm500hdv2', 'dm500hd', 'dm800', 'mixosf7', 'mixoslumi', 'mixosf5mini', 'gi9196lite', 'ixusszero', 'optimussos1', 'enfinity', 'marvel1', 'bre2ze', 'sezam1000hd', 'mbmini', 'atemio5x00', 'xpeedlx1', 'xpeedlx2', 'vusolose', 'gbipbox', 'formuler3', 'optimussos3plus', 'force1plus', 'vuzero', 'vizyonvita') or (about.getModelString() == 'ini-3000'):
-		del modes["YPbPr"]
-	if modes.has_key("Scart") and getBoxType() in ('vuzero4k','vuuno4kse','lunix','purehdse','sf5008','et13000','e4hdultra','beyonwizu4','osninopro','osnino','osninoplus','axultra','gbue4k','gi11000','spycat4kmini','tmtwin4k','tmnanom3','gbquad4k','revo4k','force3uhd','force2nano','dm900', 'dm920', 'wetekplay', 'wetekplay2', 'wetekhub', 'bre2ze4k', 'vuuno4k', 'vuultimo4k', 'sf4008', 'novaip', 'dm520', 'dm525', 'purehd', 'vusolo4k', 'fusionhdse', 'fusionhd', 'force2', 'force2plus', 'force2plushv', 'optimussos', 'tmnanose', 'tmnanosecombo', 'gbx1', 'gbx2', 'gbx3', 'gbx3h', 'gbultraue', 'gbultraueh', 'zgemmai55', 'mutant1500'):
-		del modes["Scart"]
-		
+
 	if getBoxType() in ('mutant2400'):
 		f = open("/proc/stb/info/board_revision", "r").read()
 		if f >= "2":
@@ -141,9 +157,9 @@ class AVSwitch:
 			f.close()
 		except IOError:
 			print "[AVSwitch] couldn't read available videomodes."
-			self.modes_available = [ ]
-			return
-		self.modes_available = modes.split(' ')
+			modes = [ ]
+			return modes
+		return modes.split(' ')
 
 	def readPreferredModes(self):
 		if config.av.edid_override.value == False:
@@ -163,14 +179,14 @@ class AVSwitch:
 					print "[AVSwitch] reading _preferred modes: ", self.modes_preferred
 				except IOError:
 					print "[AVSwitch] reading preferred modes failed, using all modes"
-					self.modes_preferred = self.modes_available
+					self.modes_preferred = self.readAvailableModes()
 		else:
-			self.modes_preferred = self.modes_available
+			self.modes_preferred = self.readAvailableModes()
 			print "[AVSwitch] used default modes: ", self.modes_preferred
 			
 		if len(self.modes_preferred) <= 2:
 			print "[AVSwitch] preferend modes not ok, possible driver failer, len=", len(self.modes_preferred)
-			self.modes_preferred = self.modes_available
+			self.modes_preferred = self.readAvailableModes()
 
 		if self.modes_preferred != self.last_modes_preferred:
 			self.last_modes_preferred = self.modes_preferred
@@ -194,7 +210,7 @@ class AVSwitch:
 						print "[AVSwitch] no, not preferred"
 						return False
 			if port != "HDMI":
-				if mode not in self.modes_available:
+				if mode not in self.readAvailableModes():
 					return False
 			elif mode not in self.modes_preferred:
 				return False
@@ -531,6 +547,9 @@ def InitAVSwitch():
 	config.av.autores_1080p24 = ConfigSelection(choices={"1080p24": _("1080p 24Hz"), "1080p25": _("1080p 25Hz"), "1080i50": _("1080p 50Hz"), "1080i": _("1080i 60Hz")}, default="1080p24")
 	config.av.autores_1080p25 = ConfigSelection(choices={"1080p25": _("1080p 25Hz"), "1080p50": _("1080p 50Hz"), "1080i50": _("1080i 50Hz")}, default="1080p25")
 	config.av.autores_1080p30 = ConfigSelection(choices={"1080p30": _("1080p 30Hz"), "1080p60": _("1080p 60Hz"), "1080i": _("1080i 60Hz")}, default="1080p30")
+	config.av.autores_2160p24 = ConfigSelection(choices={"2160p24": _("2160p 24Hz"), "2160p25": _("2160p 25Hz"), "2160p30": _("2160p 30Hz")}, default="2160p24")
+	config.av.autores_2160p25 = ConfigSelection(choices={"2160p25": _("2160p 25Hz"), "2160p50": _("2160p 50Hz")}, default="2160p25")
+	config.av.autores_2160p30 = ConfigSelection(choices={"2160p30": _("2160p 30Hz"), "2160p60": _("2160p 60Hz")}, default="2160p30")
 	config.av.smart1080p = ConfigSelection(choices={"false": _("off"), "true": _("1080p50: 24p/50p/60p"), "2160p50": _("2160p50: 24p/50p/60p"), "1080i50": _("1080i50: 24p/50i/60i"), "720p50": _("720p50: 24p/50p/60p")}, default="false")
 	config.av.colorformat = ConfigSelection(choices=colorformat_choices, default="rgb")
 	config.av.aspectratio = ConfigSelection(choices={
@@ -696,14 +715,14 @@ def InitAVSwitch():
 		def setEDIDBypass(configElement):
 			try:
 				f = open("/proc/stb/hdmi/bypass_edid_checking", "w")
-				f.write(configElement.value)
+				if configElement.value:
+					f.write("00000001")
+				else:
+					f.write("00000000")
 				f.close()
 			except:
 				pass
-		config.av.bypass_edid_checking = ConfigSelection(choices={
-				"00000000": _("off"),
-				"00000001": _("on")},
-				default = "00000001")
+		config.av.bypass_edid_checking = ConfigYesNo(default=True)
 		config.av.bypass_edid_checking.addNotifier(setEDIDBypass)
 	else:
 		config.av.bypass_edid_checking = ConfigNothing()
@@ -1184,6 +1203,45 @@ def InitAVSwitch():
 		config.av.transcodeaac.addNotifier(setAACTranscode)
 	else:
 		config.av.transcodeaac = ConfigNothing()
+
+	if os.path.exists("/proc/stb/audio/btaudio"):
+		f = open("/proc/stb/audio/btaudio", "r")
+		can_btaudio = f.read().strip().split(" ")
+		f.close()
+	else:
+		can_btaudio = False
+
+	SystemInfo["CanBTAudio"] = can_btaudio
+
+	if can_btaudio:
+		def setBTAudio(configElement):
+			f = open("/proc/stb/audio/btaudio", "w")
+			f.write(configElement.value)
+			f.close()
+		choice_list = [("off", _("off")), ("on", _("on"))]
+		config.av.btaudio = ConfigSelection(choices = choice_list, default = "off")
+		config.av.btaudio.addNotifier(setBTAudio)
+	else:
+		config.av.btaudio = ConfigNothing()
+
+	if os.path.exists("/proc/stb/audio/btaudio_delay"):
+		f = open("/proc/stb/audio/btaudio_delay", "r")
+		can_btaudio_delay = f.read().strip().split(" ")
+		f.close()
+	else:
+		can_btaudio_delay = False
+
+	SystemInfo["CanBTAudioDelay"] = can_btaudio_delay
+
+	if can_btaudio_delay:
+		def setBTAudioDelay(configElement):
+			f = open("/proc/stb/audio/btaudio_delay", "w")
+			f.write(format(configElement.value * 90,"x"))
+			f.close()
+		config.av.btaudiodelay = ConfigSelectionNumber(-1000, 1000, 5, default = 0)
+		config.av.btaudiodelay.addNotifier(setBTAudioDelay)
+	else:
+		config.av.btaudiodelay = ConfigNothing()
 
 	if os.path.exists("/proc/stb/vmpeg/0/pep_scaler_sharpness"):
 		def setScaler_sharpness(config):

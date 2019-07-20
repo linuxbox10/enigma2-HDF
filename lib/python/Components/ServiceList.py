@@ -74,7 +74,7 @@ class ServiceList(HTMLComponent, GUIComponent):
 		self.ServiceNameFontSize = 22
 		self.ServiceInfoFontName = "Regular"
 		self.ServiceInfoFontSize = 18
-		self.progressBarWidth = 52
+		self.progressBarWidth = config.usage.serviceinfo_progressBarWidth.value
 		self.fieldMargins = 10
 
 		self.onSelectionChanged = [ ]
@@ -154,6 +154,7 @@ class ServiceList(HTMLComponent, GUIComponent):
 		self.listHeight = self.instance.size().height()
 		self.listWidth = self.instance.size().width()
 		self.setItemsPerPage()
+		self.setServiceFontsize()
 		return rc
 
 	def connectSelChanged(self, fnc):
@@ -354,6 +355,7 @@ class ServiceList(HTMLComponent, GUIComponent):
 		self.setItemsPerPage()
 		self.l.setItemHeight(self.ItemHeight)
 		self.l.setVisualMode(eListboxServiceContent.visModeComplex)
+		self.l.setServicePiconRatio(int(config.usage.servicelist_picon_ratio.value))
 
 		if config.usage.service_icon_enable.value:
 			self.l.setGetPiconNameFunc(getPiconName)

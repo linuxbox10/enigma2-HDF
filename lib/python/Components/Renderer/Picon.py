@@ -76,20 +76,8 @@ def findPicon(serviceName):
 			return ""
 
 def getPiconName(serviceName):
-	#remove the path and name fields, and replace ':' by '_'
 	sname = '_'.join(GetWithAlternative(serviceName).split(':', 10)[:10])
 	pngname = findPicon(sname)
-	if not pngname:
-		fields = sname.split('_', 3)
-		if len(fields) > 2 and fields[2] != '1': #fallback to 1 for services with different service types
-			fields[2] = '1'
-		if len(fields) > 0 and fields[0] != '1': #fallback to 1 for IPTV streams
-			fields[0] = '1'
-		if len(fields) > 0 and fields[0] == '5001': #fallback to 1 for IPTV streams
-			fields[0] = '1'
-		if len(fields) > 0 and fields[0] == '5002': #fallback to 1 for IPTV streams
-			fields[0] = '1'
-		pngname = findPicon('_'.join(fields))
 	if not pngname: # picon by channel name
 		name = ServiceReference(serviceName).getServiceName()
 		name = unicodedata.normalize('NFKD', unicode(name, 'utf_8', errors='ignore')).encode('ASCII', 'ignore')
@@ -98,6 +86,26 @@ def getPiconName(serviceName):
 			pngname = findPicon(name)
 			if not pngname and len(name) > 2 and name.endswith('hd'):
 				pngname = findPicon(name[:-2])
+	if not pngname:
+		fields = sname.split('_', 3)
+		if len(fields) > 0 and fields[0] != '1':
+			fields[0] = '1'
+		pngname = findPicon('_'.join(fields))
+		if len(fields) > 2:
+			while not pngname:
+				tmp = ''
+				for i in range(256):
+					tmp = hex(i)[2:].upper().zfill(2)
+					fields[2] = tmp
+					pngname = findPicon('_'.join(fields))
+					if pngname:
+						newpng = '/usr/share/enigma2/picon/' + name + '.png'
+						try:
+							os.symlink(pngname, newpng)
+						except:
+							pass
+						break
+				if tmp == "FF": break
 	return pngname
 
 class Picon(Renderer):

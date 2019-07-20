@@ -46,6 +46,13 @@ from Navigation import Navigation
 profile("LOAD:skin")
 from skin import readSkin
 
+from twisted.python import log
+config.misc.enabletwistedlog = ConfigYesNo(default = False)
+if config.misc.enabletwistedlog.value == True:
+	log.startLogging(open('/tmp/twisted.log', 'w'))
+else:
+	log.startLogging(sys.stdout)
+
 profile("LOAD:Tools")
 from Tools.Directories import InitFallbackFiles, resolveFilename, SCOPE_PLUGINS, SCOPE_ACTIVE_SKIN, SCOPE_CURRENT_SKIN, SCOPE_CONFIG
 from Components.config import config, configfile, ConfigText, ConfigYesNo, ConfigInteger, ConfigSelection, NoSave, ConfigNumber
@@ -505,48 +512,9 @@ profile("Load:StackTracePrinter")
 from Components.StackTrace import StackTracePrinter
 StackTracePrinterInst = StackTracePrinter()
 
-from threading import Thread, current_thread
-from sys import _current_frames
-from traceback import extract_stack
-from time import sleep
-
-class StackTracePrinter(Thread):
-	def __init__(self):
-		Thread.__init__(self)
-		self.__running = False
-
-	def activate(self, MainThread_ident):
-		self.MainThread_ident = MainThread_ident
-		if not self.__running:
-			self.__running = True
-			self.start()
-
-	def run(self):
-		while (self.__running == True):
-			if (os.path.isfile("/tmp/doPythonStackTrace")):
-				os.remove("/tmp/doPythonStackTrace")
-				print "========== Stacktrace of running Python threads =========="
-				for threadId, stack in _current_frames().items():
-					if (threadId != current_thread().ident):
-						if (threadId == self.MainThread_ident):
-							print "========== MainThread %s ==========" % threadId
-						else:
-							print "========== Thread ID %s ==========" % threadId
-						for filename, lineno, name, line in extract_stack(stack):
-							print 'File: "%s", line %d, in %s' % (filename, lineno, name)
-							if line:
-								print "  %s" % (line.strip())
-				print "=========================================================="
-			sleep(1)
-		Thread.__init__(self)
-
-	def deactivate(self):
-		self.__running = False
-
-StackTracePrinter = StackTracePrinter()
-
-from time import time, localtime, strftime
+from time import time, localtime, strftime, sleep
 from Tools.StbHardware import setFPWakeuptime, setRTCtime
+
 def runScreenTest():
 	config.misc.startCounter.value += 1
 
@@ -588,7 +556,7 @@ def runScreenTest():
 	profile("Init:PowerKey")
 	power = PowerKey(session)
 
-	if boxtype in ('sf8008','clap4k','alien5','osninopro','osnino','osninoplus','alphatriple','spycat4kmini','tmtwin4k','mbmicrov2','revo4k','force3uhd','wetekplay', 'wetekplay2', 'wetekhub', 'dm7020hd', 'dm7020hdv2', 'osminiplus', 'osmega', 'sf3038', 'spycat', 'e4hd', 'e4hdhybrid', 'mbmicro', 'et7500', 'mixosf5', 'mixosf7', 'mixoslumi', 'gi9196m', 'maram9', 'ixussone', 'ixusszero', 'uniboxhd1', 'uniboxhd2', 'uniboxhd3', 'sezam5000hd', 'mbtwin', 'sezam1000hd', 'mbmini', 'atemio5x00', 'beyonwizt3', '9910lx', '9911lx') or getBrandOEM() in ('fulan') or getMachineBuild() in ('dags7362' , 'dags73625', 'dags5'):
+	if boxtype in ('alien5','osninopro','osnino','osninoplus','alphatriple','spycat4kmini','tmtwin4k','mbmicrov2','revo4k','force3uhd','wetekplay', 'wetekplay2', 'wetekhub', 'dm7020hd', 'dm7020hdv2', 'osminiplus', 'osmega', 'sf3038', 'spycat', 'e4hd', 'e4hdhybrid', 'mbmicro', 'et7500', 'mixosf5', 'mixosf7', 'mixoslumi', 'gi9196m', 'maram9', 'ixussone', 'ixusszero', 'uniboxhd1', 'uniboxhd2', 'uniboxhd3', 'sezam5000hd', 'mbtwin', 'sezam1000hd', 'mbmini', 'atemio5x00', 'beyonwizt3', '9910lx', '9911lx', '9920lx') or getBrandOEM() in ('fulan') or getMachineBuild() in ('u41','dags7362','dags73625','dags5','ustym4kpro','beyonwizv2','viper4k','sf8008','cc1','gbmv200'):
 		profile("VFDSYMBOLS")
 		import Components.VfdSymbols
 		Components.VfdSymbols.SymbolsCheck(session)
@@ -603,10 +571,6 @@ def runScreenTest():
 	profile("Init:AutoVideoMode")
 	import Screens.VideoMode
 	Screens.VideoMode.autostart(session)
-
-	profile("Init:StackTracePrinter")
-	from threading import current_thread
-	StackTracePrinter.activate(current_thread().ident)
 
 	profile("RunReactor")
 	profile_final()
