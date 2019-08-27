@@ -45,6 +45,7 @@ from Screens.RdsDisplay import RassInteractive
 from ServiceReference import ServiceReference
 from Tools.BoundFunction import boundFunction
 from Tools import Notifications
+from RecordTimer import TIMERTYPE
 from time import localtime, time
 from os import remove
 try:
@@ -744,10 +745,10 @@ class ChannelSelectionEPG:
 		self["ChannelSelectBaseActions"].setEnabled(True)
 
 	def doRecordCurrentTimer(self):
-		self.doInstantTimer(0, parseCurentEvent)
+		self.doInstantTimer(TIMERTYPE.JUSTPLAY, parseCurentEvent)
 
 	def doRecordNextTimer(self):
-		self.doInstantTimer(0, parseNextEvent, True)
+		self.doInstantTimer(TIMERTYPE.JUSTPLAY, parseNextEvent, True)
 
 	def doZapTimer(self):
 		self.doInstantTimer(1, parseNextEvent)
@@ -1280,6 +1281,7 @@ class ChannelSelectionEdit:
 			self.setTitle(self.saved_title)
 			self.saved_title = None
 			self.servicelist.resetRoot()
+			self.servicelist.l.setHideNumberMarker(config.usage.hide_number_markers.value)
 			self.servicelist.setCurrent(self.servicelist.getCurrent())
 		else:
 			self.mutableList = self.getMutableList()
@@ -1313,6 +1315,16 @@ class ChannelSelectionEdit:
 		l.setServiceFontsize()
 		l.setItemsPerPage()
 		l.setMode('MODE_TV')
+
+		# l.setMode('MODE_TV') automatically sets "hide number marker" to 
+		# the config.usage.hide_number_markers.value so when we are in "movemode"
+		# we need to force display of the markers here after l.setMode('MODE_TV') 
+		# has run. If l.setMode('MODE_TV') were ever removed above, 
+		# "self.servicelist.l.setHideNumberMarker(False)" could be moved 
+		# directly to the "else" clause of "def toggleMoveMode".
+		if self.movemode: 
+			self.servicelist.l.setHideNumberMarker(False)
+
 		if close:
 			self.cancel()
 
