@@ -49,7 +49,7 @@ from Tools import Directories, Notifications
 from Tools.Directories import pathExists, fileExists, getRecordingFilename, copyfile, moveFiles, resolveFilename, SCOPE_TIMESHIFT, SCOPE_CURRENT_SKIN
 from Tools.KeyBindings import getKeyDescription
 from enigma import eTimer, eServiceCenter, eDVBServicePMTHandler, iServiceInformation, iPlayableService, eServiceReference, pNavigation, eEPGCache, eActionMap, eDVBVolumecontrol, getDesktop, eDVBDB, quitMainloop
-from boxbranding import getBoxType, getMachineBrand, getMachineName, getBrandOEM, getDriverDate, getImageVersion, getImageBuild, getMachineProcModel, getMachineBuild
+from boxbranding import getBoxType, getMachineBrand, getMachineName, getBrandOEM, getDriverDate, getImageVersion, getImageBuild, getMachineProcModel, getMachineBuild ,getMachineMtdKernel, getDisplayType
 
 from time import time, localtime, strftime
 from bisect import insort
@@ -1055,42 +1055,6 @@ class InfoBarShowHide(InfoBarScreenSaver):
 			epglist[0] = epglist[1]
 			epglist[1] = tmp
 			setEvent(epglist[0])
-
-class BufferIndicator(Screen):
-	def __init__(self, session):
-		Screen.__init__(self, session)
-		self["status"] = Label()
-		self.mayShow = False
-		self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
-			{
-				iPlayableService.evBuffering: self.bufferChanged,
-				iPlayableService.evStart: self.__evStart,
-				iPlayableService.evGstreamerPlayStarted: self.__evGstreamerPlayStarted,
-			})
-
-	def bufferChanged(self):
-		if self.mayShow:
-			service = self.session.nav.getCurrentService()
-			info = service and service.info()
-			if info:
-				value = info.getInfo(iServiceInformation.sBuffer)
-				if value and value != 100:
-					self["status"].setText(_("Buffering Stream %d%%") % value)
-					if not self.shown:
-						self.show()
-
-	def __evStart(self):
-		self.mayShow = True
-		self.hide()
-
-	def __evGstreamerPlayStarted(self):
-		self.mayShow = False
-		self.hide()
-
-class InfoBarBuffer():
-	def __init__(self):
-		self.bufferScreen = self.session.instantiateDialog(BufferIndicator)
-		self.bufferScreen.hide()
 
 class NumberZap(Screen):
 	def quit(self):
@@ -6476,6 +6440,8 @@ try:
 	os.system("echo getMachineBuild = " + getMachineBuild() + " >> /etc/enigma2/boxinformations")
 	os.system("echo getBoxType = " + getBoxType() + " >> /etc/enigma2/boxinformations")
 	os.system("echo getChipSetString = " + about.getChipSetString() + " >> /etc/enigma2/boxinformations")
+	os.system("echo getMachineMtdKernel = " + getMachineMtdKernel() + " >> /etc/enigma2/boxinformations")
+	os.system("echo getDisplayType = " + getDisplayType() + " >> /etc/enigma2/boxinformations")
 	os.system("echo getBrandOEM = " + getBrandOEM() + " >> /etc/enigma2/boxinformations")
 	os.system("echo getDriverDate = " + getDriverDate() + " >> /etc/enigma2/boxinformations")
 	os.system("echo getImageVersion = " + getImageVersion() + " >> /etc/enigma2/boxinformations")

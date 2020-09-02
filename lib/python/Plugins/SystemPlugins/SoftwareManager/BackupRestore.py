@@ -1,25 +1,21 @@
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Screens.Console import Console
-from Screens.Standby import TryQuitMainloop
 from Components.ActionMap import ActionMap, NumberActionMap
-from Components.Pixmap import Pixmap
 from Tools.LoadPixmap import LoadPixmap
 from Components.Label import Label
 from Components.Sources.StaticText import StaticText
 from Components.MenuList import MenuList
 from Components.Sources.List import List
 from Components.Button import Button
-from Components.config import getConfigListEntry, configfile, ConfigSelection, ConfigSubsection, ConfigText, ConfigLocations
+from Components.config import ConfigLocations, ConfigSubsection, ConfigText, configfile
 from Components.config import config
-from Components.ConfigList import ConfigList,ConfigListScreen
+from Components.ConfigList import ConfigListScreen
 from Components.FileList import MultiFileSelectList
 from Components.Network import iNetwork
-from Plugins.Plugin import PluginDescriptor
-from enigma import eTimer, eEnv, eConsoleAppContainer, eEPGCache
+from enigma import eConsoleAppContainer, eEPGCache, eEnv
 from Tools.Directories import *
-from os import system, popen, path, makedirs, listdir, access, stat, rename, remove, W_OK, R_OK
-from time import gmtime, strftime, localtime, sleep
+from os import listdir, makedirs, path, popen, remove, rename, stat
 from datetime import date
 from boxbranding import getBoxType, getMachineBrand, getMachineName, getImageDistro
 import ShellCompatibleFunctions
@@ -40,7 +36,7 @@ config.plugins.configurationbackup.backupdirs = ConfigLocations(default=[eEnv.re
 																			'/etc/auto.network', '/etc/default/dropbear', '/home/root/', '/etc/samba/', '/etc/fstab', '/etc/inadyn.conf', '/etc/ConfFS/', '/etc/enigma2/ci_auth_slot_0.bin', '/etc/enigma2/ci_auth_slot_1.bin',
 																			'/etc/network/interfaces', '/etc/wpa_supplicant.conf', '/etc/default_gw', '/etc/wpa_supplicant.ath0.conf', '/etc/dropbear/', '/etc/volume.xml', '/etc/cron/crontabs/root', '/etc/vtuner.conf',
 																			'/etc/wpa_supplicant.wlan0.conf', '/etc/wpa_supplicant.wlan1.conf', '/etc/resolv.conf', '/etc/hostname', '/usr/share/enigma2/XionHDF/skin.xml', '/etc/xmltvimport', '/etc/ava_volume.cfg', '/etc/ava_setup.cfg',
-																			'/etc/openvpn/', '/etc/ipsec.conf', '/etc/ipsec.secrets', '/etc/ipsec.user', '/etc/strongswan.conf', '/usr/lib/enigma2/python/Plugins/Extensions/VMC/DB/', '/usr/lib/enigma2/python/Plugins/Extensions/VMC/youtv.pwd',
+																			'/etc/openvpn/', '/etc/ipsec.conf', '/etc/ipsec.secrets', '/etc/ipsec.user', '/etc/strongswan.conf', '/usr/lib/enigma2/python/Plugins/Extensions/VMC/DB/', '/usr/lib/enigma2/python/Plugins/Extensions/VMC/youtv.pwd', '/usr/bin/enigma2_pre_start.sh',
 																			'/usr/lib/enigma2/python/Plugins/Extensions/VMC/vod.config', '/usr/lib/enigma2/python/Plugins/Extensions/MP3Browser/db', '/usr/lib/enigma2/python/Plugins/Extensions/MovieBrowser/db', '/usr/lib/enigma2/python/Plugins/Extensions/TVSpielfilm/db',
 																			eEnv.resolve("${datadir}/enigma2/keymap.usr"), eEnv.resolve("${datadir}/enigma2/keymap.ntr"), eEnv.resolve("${datadir}/enigma2/keymap_usermod.xml")]\
 																			+eEnv_resolve_multi('/usr/bin/*cam*')\
@@ -119,7 +115,7 @@ class BackupScreen(Screen, ConfigListScreen):
 			if not "/tmp/changed-configfiles.txt" in self.backupdirs:
 				self.backupdirs = self.backupdirs + " /tmp/changed-configfiles.txt"
 
-			cmd1 = "opkg list-installed | egrep -v '^ ' | awk '{print $1 }' | egrep 'enigma2-plugin-|task-base|packagegroup-base|^ca-certificates$|^davfs2$|^joe$|^mc$|^mergerfs$|^nano$|^openvpn|^easy-rsa$|^simple-rsa$|^perl|^rclone$|^streamproxy$|^wget$' > /tmp/installed-list.txt"
+			cmd1 = "opkg list-installed | egrep -v '^ ' | awk '{print $1 }' | egrep 'enigma2-plugin-|task-base|packagegroup-base|^ca-certificates$|minilocale|^davfs2$|^joe$|^mc$|^mergerfs$|^nano$|^openvpn|^easy-rsa$|^simple-rsa$|^perl|^rclone$|^streamproxy$|^wget$' > /tmp/installed-list.txt"
 			cmd2 = "opkg list-changed-conffiles > /tmp/changed-configfiles.txt"
 			cmd3 = "echo -n Backup is running ...please wait"
 			cmd4 = "tar -czf " + self.fullbackupfilename + " " + self.backupdirs + " 2>/tmp/settingsbackup.log"

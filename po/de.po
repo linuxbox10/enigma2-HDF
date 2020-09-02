@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: tuxbox-enigma 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-19 23:44+0100\n"
-"PO-Revision-Date: 2019-08-28 16:55+0200\n"
+"PO-Revision-Date: 2020-07-22 16:23+0200\n"
 "Last-Translator: Koivo <koivo@hdfreaks.cc>\n"
 "Language-Team: openHDF\n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Generator: Poedit 2.3.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 msgid "Welcome..."
@@ -177,7 +177,7 @@ msgid "Config Menu..."
 msgstr "Konfiguration..."
 
 msgid "Start Update every "
-msgstr "Starte das Update alle"
+msgstr "Starte das Update alle "
 
 msgid "An automated refresh will start after this duration."
 msgstr "Nach dieser Zeit werden die IPTV Listen automatisch geladen."
@@ -428,10 +428,10 @@ msgid "The aspect ratio of the recording."
 msgstr "Das Seitenverhältnis der Aufnahme."
 
 msgid "Zap to"
-msgstr "Schalte zu ..."
+msgstr "Schalte zu"
 
 msgid "Panic to"
-msgstr "Panikfunktion zu ..."
+msgstr "Panikfunktion zu"
 
 msgid "Restart Enigma"
 msgstr "Enigma Neustart"
@@ -482,7 +482,7 @@ msgid "Same as in active"
 msgstr "Einstellung wie bei aktiver Box"
 
 msgid "Hard disk standby in box standby after"
-msgstr "Festplatten Ruhezustand im Standby nach:"
+msgstr "Festplatten Ruhezustand im Standby nach"
 
 msgid "Use Harddisk Hardware Standby Timer"
 msgstr "Verwendung des Festplatten Hardware Standby Timers"
@@ -575,7 +575,7 @@ msgid ""
 "Flash on the fly your %s %s."
 msgstr ""
 "\n"
-"Flashen   Online / Local Ihrer %s %s."
+"Flashen - Online/Local der %s %s."
 
 msgid ""
 "\n"
@@ -585,16 +585,63 @@ msgstr ""
 "Verwaltung der Multiboots der %s %s."
 
 msgid "Online = Download a image and flash it"
-msgstr "Online = Image online laden und Flashen."
+msgstr "Online = Image online laden und Flashen"
 
 msgid "Local = Flash a image from local path /hdd/images"
-msgstr "Local = Image von HDD oder USB Flashen."
+msgstr "Local = Image von HDD oder USB Flashen"
 
 msgid "Flash On the fly (select a image)"
 msgstr "Image zum Flashen auswählen"
 
 msgid "Flash On the Fly"
 msgstr "Flashen   Online / Local"
+
+msgid "Save settings and EPG data"
+msgstr "Einstellungen und EPG-Daten speichern"
+
+msgid ""
+"Do you want to flash image\n"
+"%s"
+msgstr ""
+"Möchten Sie das folgende Image flashen?\n"
+"%s"
+
+msgid "slot%s - %s (current image)"
+msgstr "Startup %s - %s (aktuelles Image)"
+
+msgid "slot%s - %s (current)"
+msgstr "Startup %s - %s (aktuell)"
+
+msgid "slot%s - %s"
+msgstr "Startup %s - %s"
+
+msgid "Empty slot"
+msgstr "Leeres Startup"
+
+msgid "(current image)"
+msgstr "(aktuelles Image)"
+
+msgid "Slot %s: %s%s"
+msgstr "Startup %s: %s%s"
+
+msgid "Slot %s: %s - Mode %d%s"
+msgstr "Startup %s: %s - Mode %d%s"
+
+msgid "No, do not flash an image"
+msgstr "Nein, kein Image flashen"
+
+msgid "Unzipping Image"
+msgstr "Entpacke Image"
+
+msgid "Please wait"
+msgstr "Bitte warten"
+
+msgid ""
+"%s\n"
+"Press ok to close"
+msgstr ""
+"%s\n"
+"OK drücken zum Beenden"
 
 msgid "Please select what to do after first booting the image:\n"
 msgstr "Bitte auswählen was nach dem ersten Starten erledigt werden soll:\n"
@@ -609,7 +656,7 @@ msgid "Unzipping files, Please wait ..."
 msgstr "Datei wird entpackt, bitte warten ..."
 
 msgid " (disabled)"
-msgstr "(deaktiviert)"
+msgstr " (deaktiviert)"
 
 msgid " (higher than any auto)"
 msgstr " (higher than any auto)"
@@ -822,7 +869,7 @@ msgid " (TV)"
 msgstr " (TV)"
 
 msgid " and"
-msgstr "und"
+msgstr " und"
 
 msgid "%-H:%M"
 msgstr "%-H:%M"
@@ -890,8 +937,8 @@ msgstr[1] "%d Mins"
 
 msgid "%d channel found"
 msgid_plural "%d channels found"
-msgstr[0] "%d Sender gefunden!"
-msgstr[1] "%d Sender gefunden!"
+msgstr[0] "%d Sender gefunden"
+msgstr[1] "%d Sender gefunden"
 
 msgid "%d hour"
 msgid_plural "%d hours"
@@ -1017,7 +1064,7 @@ msgid "12V output"
 msgstr "12V-Ausgang"
 
 msgid "12V output."
-msgstr "12V-Ausgang"
+msgstr "12V-Ausgang."
 
 msgid "13 V"
 msgstr "13 V"
@@ -1271,10 +1318,10 @@ msgid "A recording is currently running. Please stop the recording before trying
 msgstr "Zur Zeit sind Aufnahmen aktiv. Bitte Aufnahme beenden, bevor der Signalfinder gestartet wird."
 
 msgid "Yes, delete from Timerlist"
-msgstr "Ja, den Timer löschen."
+msgstr "Ja, den Timer löschen"
 
 msgid "Yes, delete Timer and delete recording"
-msgstr "Ja, den Timer und die Aufnahme löschen."
+msgstr "Ja, den Timer und die Aufnahme löschen"
 
 msgid "Do you really want to delete the recording?"
 msgstr "Wollen Sie die Aufnahme wirklich löschen?"
@@ -1552,7 +1599,7 @@ msgid "Current mode: %s \n"
 msgstr "Aktueller Modus: %s \n"
 
 msgid "Press '0' to toggle PiP mode"
-msgstr "Drücke '0' zum wechseln des 'Bild-in-Bild' Modus."
+msgstr "Drücke '0' zum wechseln des 'Bild-in-Bild' Modus"
 
 msgid "Activate network settings"
 msgstr "Aktiviere Netzwerkeinstellungen"
@@ -1796,7 +1843,7 @@ msgid "Allocate unused memory index"
 msgstr "Unbenutzten Speicher Index reservieren"
 
 msgid "Allow quit movieplayer with exit"
-msgstr "Beende Mediaplayer mit Exit "
+msgstr "Beende Mediaplayer mit Exit"
 
 msgid "Allow subtitle language to equal audio language"
 msgstr "Erlaube gleiche Sprache bei Untertitel und Ton"
@@ -1847,7 +1894,7 @@ msgid "Crash at skin error for debug reasons ?"
 msgstr "Auch bei Skin-Fehlern abstürzen?"
 
 msgid "if set to 'no', only an debug message is written to the Debug log "
-msgstr "Wenn die Option auf 'Nein' gesetzt wird, dann gibt es bei Fehlern im Skin nur einen Debug-Log-Eintrag."
+msgstr "Wenn die Option auf 'Nein' gesetzt wird, dann gibt es bei Fehlern im Skin nur einen Debug-Log-Eintrag "
 
 msgid "Log python stack trace on spinner ?"
 msgstr "Bei Spinner Python Stack Trace loggen ?"
@@ -1856,13 +1903,13 @@ msgid "Set to yes for debugging the root cause of a spinner."
 msgstr "Auf 'ja' setzen, um die Ursache eines Spinners zu debuggen."
 
 msgid "Allows you to show/hide CCcam in extensions (blue button)."
-msgstr "CCcam-Info in Erweiterungen (blaue Taste) anzeigen"
+msgstr "CCcam-Info in Erweiterungen (blaue Taste) anzeigen."
 
 msgid "Allows you to show/hide Log Manager in extensions (blue button)."
 msgstr "Erlaubt es dir die Log Verwaltung in Erweiterungen (blaue Taste) anzuzeigen/zu verstecken."
 
 msgid "Allows you to show/hide OScam in extensions (blue button)."
-msgstr "OScam-Info in Erweiterungen (blaue Taste) anzeigen"
+msgstr "OScam-Info in Erweiterungen (blaue Taste) anzeigen."
 
 msgid "Alpha"
 msgstr "Buchstabe"
@@ -2057,7 +2104,7 @@ msgstr ""
 "Es muss eine HDD gemountet sein.\n"
 
 msgid "Use OnlineFlash in SoftwareManager"
-msgstr "Benutze das Image Online-Flash in der Softwareerwaltung"
+msgstr "Benutze das Image Online-Flash in der Softwareverwaltung"
 
 msgid "Time required for this process: %s"
 msgstr "Benötigte Zeit für diesen Vorgang: %s"
@@ -2069,7 +2116,7 @@ msgid "of the USB-ports, therefore an extra copy of the "
 msgstr "für eine Extra Kopie an einem der USB-Ports gefunden "
 
 msgid "back-up image will now be copied to that USB-flash drive. "
-msgstr "Das Backup Image wird jetzt zusätzlich auf diesen Stick kopiert."
+msgstr "Das Backup Image wird jetzt zusätzlich auf diesen Stick kopiert. "
 
 msgid "This only takes about 1 or 2 minutes"
 msgstr "Das wird etwa 1 oder 2 Minuten dauern"
@@ -2173,10 +2220,10 @@ msgid "Aspect ratio"
 msgstr "Aspect/Ratio"
 
 msgid "Assigned CAIds:"
-msgstr "zugewiesene CAIDs:"
+msgstr "Zugewiesene CAIDs:"
 
 msgid "Assigned services/provider:"
-msgstr "zugewiesene Sender/Anbieter:"
+msgstr "Zugewiesene Sender/Anbieter:"
 
 msgid "At End:"
 msgstr "Am Ende:"
@@ -2221,10 +2268,10 @@ msgid "Auto"
 msgstr "Auto"
 
 msgid "Auto Deep Standby"
-msgstr "automatisch Ausschalten"
+msgstr "Automatisch Ausschalten"
 
 msgid "Auto Standby"
-msgstr "automatisch Bereitschaft"
+msgstr "Automatisch Bereitschaft"
 
 msgid "Auto chapter split every ? minutes (0=never)"
 msgstr "Automatische Kapitelwechsel alle ? Minuten (0=nie)"
@@ -2342,6 +2389,17 @@ msgstr "Zurücksetzen der zu sichernden Dateien"
 
 msgid "Restore settings backup after restart"
 msgstr "Automatische Wiederherstellung der eigenen Settings"
+
+msgid ""
+"Can only find a network drive to store the backup.\n"
+"This means after the flash the autorestore will not work.\n"
+"Alternatively you can mount the network drive after the flash\n"
+"and manually restore your settings."
+msgstr ""
+"Es wurde nur ein Netzlaufwerk für das Backup gefunden.\n"
+"Das bedeuted der Autorestore wird nicht funktionieren.\n"
+"Nach dem Flash muss erst der Mount erstellt werden\n"
+"und die Settings manuell wiederhergestellt werden."
 
 msgid "Restore after Restart Enigma"
 msgstr "Wiederherstellung nach Enigma Neustart"
@@ -2507,7 +2565,7 @@ msgid "Burn to DVD"
 msgstr "Auf DVD brennen"
 
 msgid "Bus: "
-msgstr "Bus:"
+msgstr "Bus: "
 
 msgid "Button"
 msgstr "Taste"
@@ -2629,7 +2687,7 @@ msgid "Calculate all positions"
 msgstr "Alle Positionen berechnen"
 
 msgid "Calculation complete"
-msgstr "Berechnung beendet."
+msgstr "Berechnung beendet"
 
 msgid "Calibrate"
 msgstr "Kalibrieren"
@@ -2689,7 +2747,7 @@ msgid "Center time-labels and remove date"
 msgstr "Zentriere Zeit und entferne Datum"
 
 msgid "Change bouquets in quickzap"
-msgstr "Favoriten wechseln beim Quickzap"
+msgstr "Favoriten wechseln beim schnellen Umschalten"
 
 msgid "Extended NumberZap"
 msgstr "Erweitertes Nummern Zap"
@@ -2752,7 +2810,7 @@ msgid "Change setup PIN"
 msgstr "PIN für Einstellungen ändern"
 
 msgid "Change step size"
-msgstr "Schrittweite ändern."
+msgstr "Schrittweite ändern"
 
 msgid "Changelog"
 msgstr "Changelog"
@@ -2882,7 +2940,7 @@ msgid "Choose between Daily, Weekly, Weekdays or self defined."
 msgstr "Wähle zwischen täglich, wöchentlich, wochentags oder benutzerdefiniert."
 
 msgid "Choose the location for crash and debuglogs."
-msgstr "Wähle den Speicherort für Crash- und Debug-Logs"
+msgstr "Wähle den Speicherort für Crash- und Debug-Logs."
 
 msgid "Disable Enigma2 restart on crash"
 msgstr "Enigma2 Neustart nach Softwarefehler deaktivieren"
@@ -2990,7 +3048,7 @@ msgid "Close"
 msgstr "Schließen"
 
 msgid "Close bouquet list."
-msgstr "Schließe Favoritenliste"
+msgstr "Schließe Favoritenliste."
 
 msgid "Close dialog"
 msgstr "Dialog schließen"
@@ -3101,7 +3159,7 @@ msgid "Configure for how many minutes finished events should remain visible in t
 msgstr "Stelle ein wie viele Minuten abgelaufene Daten im EPG erhalten bleiben sollen. Es kann hilfreich sein, wenn Informationen gerade beendeter Sendungen benötigt werden oder wenn das Ende einer Sendung sich verzögert."
 
 msgid "Configure how recording filenames are constructed."
-msgstr "Konfigurieren der Zusammensetzung des Dateinamens von Aufnahmen"
+msgstr "Konfigurieren der Zusammensetzung des Dateinamens von Aufnahmen."
 
 msgid "Configure if and how service type icons will be shown."
 msgstr "Konfigurieren ob und wie Sendertyp Icons gezeigt werden."
@@ -3122,7 +3180,7 @@ msgid "Use only for Wake on WLan (WoW)"
 msgstr "Nur für Wake on WLan (WoW) aktivieren"
 
 msgid "Configure on which devices the background delete option should be used."
-msgstr "Einstellen auf welchen Laufwerken im Hintergrund gelöscht werden soll"
+msgstr "Einstellen auf welchen Laufwerken im Hintergrund gelöscht werden soll."
 
 msgid "Configure remote control type"
 msgstr "Fernbedienungstyp einstellen"
@@ -3548,7 +3606,7 @@ msgid "Connected!"
 msgstr "Verbunden!"
 
 msgid "Connected: "
-msgstr "Verbunden:"
+msgstr "Verbunden: "
 
 msgid "Constellation"
 msgstr "Konstellation"
@@ -3615,6 +3673,12 @@ msgstr "Kann keine installierte Senderliste finden."
 
 msgid "Could not load medium! No disc inserted?"
 msgstr "Konnte das Medium nicht laden! Keine DVD eingelegt?"
+
+msgid "Could not open Picture in Picture"
+msgstr "Bild in Bild ist aktuell nicht möglich"
+
+msgid "Your %s %s does not support PiP HD"
+msgstr "Ihre %s %s unterstützt kein Bild im Bild HD"
 
 msgid "No free tuner, could not open Picture in Picture"
 msgstr "Keiner freier Tuner, Bild in Bild konnte nicht geöffnet werden"
@@ -3693,6 +3757,12 @@ msgstr "Sie können diese Funktion überspringen und den TV ausschalten, wenn Si
 
 msgid "Switch off the TV to correct input"
 msgstr "Schalte den TV aus um den Eingang zu korrigieren"
+
+msgid "Enable command line function"
+msgstr "Befehlszeilenfunktion aktivieren"
+
+msgid "Activate an way to send individual or specific internal HDMI-CEC commands from the command line. Type on command line 'echo help > %s' and then read the file '%s' for a short help."
+msgstr "Aktivieren Sie die Möglichkeit, individuelle oder festgelegte interne HDMI-CEC-Befehle von der Befehlszeile zu senden. Geben Sie in der Befehlszeile \"echo help > %s\" ein und lesen Sie die Datei \"%s\" um eine kurze Hilfe zu erhalten."
 
 msgid ""
 "Some TV devices can't swich to correct input if a another hdmi port active. This setting set the TV to standby before.\n"
@@ -4091,11 +4161,38 @@ msgstr "Power LED Anzeige im Deep-Standby"
 msgid "Power LED state during standby."
 msgstr "Power LED Anzeige im Standby"
 
+msgid "Power LED State when Running."
+msgstr "Power LED Anzeige im Betrieb"
+
+msgid "Power LED State in Standby"
+msgstr "Power LED Anzeige im Standby"
+
+msgid "PowerControl FrontDisplay Normal Mode"
+msgstr "Power Control Front Display im Betrieb"
+
+msgid "PowerControl FrontDisplay Standby Mode"
+msgstr "Power Control Front Display im Standby"
+
+msgid "PowerControl FrontDisplay Suspend Mode"
+msgstr "Power Control Front Display im Deep-Standby"
+
+msgid "This option allows you to Power Off the display."
+msgstr "Mit dieser Option kann das Display an oder ausgeschaltet werden."
+
+msgid "Set LED Color or disable the LED."
+msgstr "Setzen oder deaktivieren der Power LED Farbe"
+
 msgid "Turn on the power LED."
 msgstr "Power-LED Mode"
 
+msgid "Turn on the control LED."
+msgstr "Control-LED Mode"
+
 msgid "Power LED can be turned on or off here."
-msgstr "Power-LED kann hier an oder ausgeschaltet werden.."
+msgstr "Power-LED kann hier an oder ausgeschaltet werden."
+
+msgid "Control LED can be turned on or off here."
+msgstr "Control-LED kann hier an oder ausgeschaltet werden."
 
 msgid "Power LED state during deep-standby."
 msgstr "Hier können Sie einstellen, ob die Power-LED im Deep-Standby an oder aus sein soll."
@@ -4314,7 +4411,7 @@ msgstr "Update für %s %s?"
 msgid "Show new Packages"
 msgstr "Zeige die zu aktualisierenden Pakete an"
 
-msgid "\"New Packages\""
+msgid "New Packages"
 msgstr "Neue Pakete"
 
 msgid "Upgrade and ask to reboot"
@@ -6875,7 +6972,7 @@ msgid "No Timeshift found to save as recording!"
 msgstr "Keine Timeshiftdatei gefunden die als Aufnahme gespeichert werden kann."
 
 msgid "No backup needed"
-msgstr "Keine Sicherung benötigt"
+msgstr "Keine Sicherung benötigt."
 
 msgid "No cable tuner found!"
 msgstr "Kein Kabelempfänger gefunden!"
@@ -7024,7 +7121,10 @@ msgid "No, but restart from begin"
 msgstr "Nein, aber von Anfang an neu beginnen"
 
 msgid "No, do nothing."
-msgstr "Nein, nichts tun"
+msgstr "Nein, nichts tun."
+
+msgid "Yes, shut down now."
+msgstr "Ja, jetzt herunterfahren."
 
 msgid "Do nothing"
 msgstr "Ohne Belegung ... nichts"
@@ -7342,6 +7442,24 @@ msgstr "Passwort (HTTPWD)"
 
 msgid "Password:"
 msgstr "Passwort:"
+
+msgid "Password Setup"
+msgstr "Passwort Einstellungen"
+
+msgid "New password"
+msgstr "Neues Passwort"
+
+msgid "Random password"
+msgstr "Zufallspasswort"
+
+msgid "The password can not be blank."
+msgstr "Das Passwort darf nicht leer sein."
+
+msgid "You must set a root password in order to be able to use network services, such as FTP, telnet or ssh."
+msgstr "Hier kann ein Rootpasswort festgelegt werden, um es für Netzwerkdienste wie FTP, Telnet oder SSH nutzen zu können."
+
+msgid "Password changed"
+msgstr "Passwort wurde geändert"
 
 msgid "Pause"
 msgstr "Pause"
@@ -8071,6 +8189,28 @@ msgstr "Trotzdem neu booten?"
 
 msgid "Really reflash your %s %s and reboot now?"
 msgstr "Die %s %s wirklich flashen und neu starten?"
+
+msgid "Flashing image successful"
+msgstr "Flashen vom Image war erfolgreich"
+
+msgid ""
+"Flashing image successful.\n"
+"Press ok to close.\n"
+"\n"
+"Flashed:\n"
+"%s"
+msgstr ""
+"Flashen vom Image war erfolgreich.\n"
+"Ok drücken zum Beenden.\n"
+"\n"
+"Geflasht wurde:\n"
+"%s"
+
+msgid "Retrieving image list - Please wait..."
+msgstr "Image-Liste abrufen. Bitte warten..."
+
+msgid "Retrieving image slots - Please wait..."
+msgstr "Image-Slots abrufen. Bitte warten..."
 
 msgid "Really restart now?"
 msgstr "Trotzdem neu starten?"
@@ -9104,17 +9244,35 @@ msgstr "Rotor konfigurieren."
 msgid "Setup your satellite equipment"
 msgstr "Satelliten-Ausrüstung konfigurieren"
 
-msgid "Setup your timezone."
-msgstr "Zeitzone konfigurieren."
+msgid "Time zone area"
+msgstr "Zeitzonenbereich"
+
+msgid "Time zone"
+msgstr "Zeitzone"
+
+msgid "Setup your timezone area."
+msgstr "Wählen Sie Ihre Zeitzone."
+
+msgid "Your timezone in the area."
+msgstr "Ihre Zeitzone in Ihrem Gebiet."
+
+msgid "Select your time zone area or region."
+msgstr "Wählen Sie Ihren Zeitzonenbereich oder Ihre Region aus."
+
+msgid "Select the time zone within the area or region."
+msgstr "Wählen Sie die Zeitzone innerhalb des Gebiets oder der Region aus."
 
 msgid "Please set your time zone"
 msgstr "Bitte richtige Zeitzone einstellen"
+
+msgid "Europe"
+msgstr "Europa"
 
 msgid "Shall the USB stick wizard proceed and program the image file %s into flash memory?"
 msgstr "Soll der Assistent fortfahren und die Image-Datei %s in den Flashspeicher schreiben?"
 
 msgid "Share Folder's"
-msgstr "Verzeichnis freigeben"
+msgstr "Verzeichnisse freigeben"
 
 msgid "Share View"
 msgstr "Freigabeansicht"
@@ -9195,16 +9353,16 @@ msgid "Show blinking rec symbol on Display during recording"
 msgstr "Zeige REC im Display bei Aufnahmen oder Auswahl"
 
 msgid "Blinking REC Symbol"
-msgstr "Blinkendes REC-Zeichen"
+msgstr "Blinkendes REC"
 
 msgid "REC Symbol"
-msgstr "REC-Zeichen"
+msgstr "REC"
 
 msgid "Show blinking Clock in Standby on Display during recording"
 msgstr "Zeige REC im Display bei Aufnahmen oder Auswahl im Standby"
 
 msgid "In the Standby blinking Clock on the LCD Display"
-msgstr "Im Standby blinkende Uhr im LCD-Display"
+msgstr "Aktiviert das blinkendes REC Symbol bei aktiven Aufnahmen im Standby"
 
 msgid "Show HDMI-Output Res"
 msgstr "Zeige HDMI Ausgangsauflösung"
@@ -9250,6 +9408,12 @@ msgstr "Zeige WLAN-Status"
 
 msgid "Show animation while busy"
 msgstr "Zeige Animation bei Beschäftigung"
+
+msgid "Location for infobar poster"
+msgstr "Speicherort für Infobar Poster"
+
+msgid "Define location to save infobar poster, if its activated inside skinsetup."
+msgstr "Legt den Speicherort für das Infobar Poster fest, wenn es im Skin aktiviert ist."
 
 msgid "Show background in Radio Mode"
 msgstr "Zeige Hintergrund im Radio Modus"
@@ -9696,7 +9860,7 @@ msgstr ""
 "Online-Update nicht bootet, oder das Image nicht richtig funktioniert.\n"
 "Ein neues Flashen wird die Stabilität ihres Images erhöhen!\n"
 "Sollten Sie sich dennoch für ein Online-Update entscheiden, erfolgt dies auf eigene Verantwortung!!!\n"
-"Wollen Sie trotzdem noch ein Onlne-Update durchführen?"
+"Wollen Sie trotzdem noch ein Online-Update durchführen?"
 
 msgid "Sorry uShare Config is Missing"
 msgstr "Entschuldigung Konfiguration für uShare fehlt"
@@ -10162,7 +10326,7 @@ msgid "Sync time using"
 msgstr "Synchronisiere Zeit mit"
 
 msgid "Synchronize systemtime using transponder or internet."
-msgstr "Synchronisiere Systemzeit mit Transponder oder Internet."
+msgstr "Synchronisiere die Systemzeit mit dem Transponder oder einem Internet ntp Server."
 
 msgid "System"
 msgstr "System"
@@ -11830,7 +11994,7 @@ msgid "When enabled, content with an aspect ratio of 4:3 will be stretched to fi
 msgstr "Wenn der Bildinhalt ein Aspect/Ratio von 4:3 hat wähle ob das Bild gestreckt werden soll um den ganzen Bildschirm zu füllen."
 
 msgid "When enabled, continue to the next bouquet when the last channel of the current bouquet is reached while changing channels."
-msgstr "Wenn aktiviert wird am Ende einer Favoritenliste auf den ersten Sender der nächsten Favoritenliste geschaltet."
+msgstr "Wenn aktiviert wird am Ende einer Favoritenliste auf den ersten Sender der nächsten Favoritenliste geschaltet. Diese Option ist nur für das schnelle Umschalten."
 
 msgid "When enabled, deleted recordings are moved to the trash can, instead of being deleted immediately."
 msgstr "Wenn aktiviert werden gelöscht Aufnahmen in den Mülleimer verschoben anstatt wirklich gelöscht zu werden."
@@ -12201,11 +12365,11 @@ msgid "You have to wait %s!"
 msgstr "Du musst %s warten!"
 
 msgid ""
-"You need a PC connected to your %s %s. If you need further instructions, please visit the website http://www.dm7025.de.\n"
+"You need a PC connected to your %s %s. If you need further instructions, please visit the website http://www.hdfreaks.cc.\n"
 "Your %s %s will now be halted. After you have performed the update instructions from the website, your new firmware will ask you to restore your settings."
 msgstr ""
-"Ein PC muss mit der %s %s verbunden sein.Für weiterführende Informationen besuche die Webseite http://www.dm7025.de.\n"
-"Die %s %s wird nun ausgeschaltet. Nachdem das Update wie auf der Webseite beschrieben durchgeführt wurde, wird die neue Firmware fragen, ob die Einstellungen wiederhergestellt werden sollen."
+"Sie müssen einen PC mit Ihrer %s %s verbunden haben. Wenn Sie weiterführende Informationen benötigen, besuchen Sie die Webseite http://www.hdfreaks.cc.\n"
+"Die %s %s wird nun ausgeschaltet. Nachdem Sie das Update wie auf der Webseite beschrieben durchgeführt haben, wird Sie die neue Firmware fragen, ob Sie die Einstellungen wiederherstellen wollen."
 
 msgid "You seem to be in timeshift!"
 msgstr "Timeshift scheint aktiv zu sein. "
@@ -13564,7 +13728,7 @@ msgid "this recording"
 msgstr "Diese Aufnahme"
 
 msgid "this service is protected by a parental control pin"
-msgstr "Dieser Sender ist durch einen Jugendschutz-PIN Code geschützt."
+msgstr "Dieser Sender ist durch einen Jugendschutz-PIN Code geschützt"
 
 msgid "toggle time, chapter, audio, subtitle info"
 msgstr "Schalte zwischen Zeit-, Kapitel-, Audio- und Untertitel-Info um"
@@ -13582,7 +13746,7 @@ msgid "tuner is not supported"
 msgstr "nicht unterstützter Tuner"
 
 msgid "Tuner is not supported"
-msgstr "nicht unterstützter Tuner"
+msgstr "Nicht unterstützter Tuner"
 
 msgid "uShare Log"
 msgstr "uShare Log"
@@ -13957,13 +14121,13 @@ msgid "Scan All"
 msgstr "Alles scannen"
 
 msgid "Please select a resolution..."
-msgstr "Bitte die Auflösung wählen"
+msgstr "Bitte die Auflösung wählen..."
 
 msgid "Auto(not available)"
 msgstr "Auto(nicht Verfügbar)"
 
 msgid "Aspect list..."
-msgstr "Seitenverhältnis"
+msgstr "Seitenverhältnis..."
 
 msgid ""
 "USB = Do you want to make a back-up on USB?\n"
@@ -14087,7 +14251,7 @@ msgid "Do you want to delete all other languages?"
 msgstr "Alle anderen Sprachen löschen?"
 
 msgid " Except %s"
-msgstr " %s bleibt installiert."
+msgstr " %s bleibt installiert"
 
 msgid "Do you want to delete %s language?"
 msgstr "Wollen Sie %s wirklich löschen?"
@@ -14264,7 +14428,7 @@ msgid "Show Last Updates"
 msgstr "Zeige letzte Updates"
 
 msgid "If set to 'yes', enable autorecord for automatically background timeshift"
-msgstr "Aktiviert die automatische Aufnahme für Timeshift im Hintergrund."
+msgstr "Aktiviert die automatische Aufnahme für Timeshift im Hintergrund"
 
 msgid "Enable Autorecord"
 msgstr "Aktiviert automatische Aufnahme"
@@ -14629,6 +14793,52 @@ msgstr "Der Ausschalt-Timer wurde deaktiviert."
 msgid "Do you want to backup your image and settings before?"
 msgstr "Soll vorher ein Backup vom Image oder den Settings gemacht werden?"
 
+msgid "Do you want to backup your settings now?"
+msgstr "Sollen jetzt die Einstellungen gesichert werden?"
+
+msgid "Could not find suitable media - Please remove some downloaded images or insert a media (e.g. USB stick) with sufficient free space and try again!"
+msgstr "Es konnte kein geeignetes Medium gefunden werden. Bitte entfernen Sie einige heruntergeladene Images oder legen Sie ein Medium (z.B. USB-Stick) mit ausreichend freiem Speicherplatz ein und versuchen Sie es erneut."
+
+msgid ""
+"Recording(s) are in progress or coming up in few seconds!\n"
+"Entering standby, after recording the box will shutdown."
+msgstr ""
+"Zurzeit ist eine/sind Aufnahmen aktiv oder starten gleich!\n"
+"Der Receiver wird jetzt in den Standby versetzt und am Ende der Aufnahme(n) heruntergefahren."
+
+msgid "Downloading Image ... Please wait"
+msgstr "Download Image ... Bitte warten"
+
+msgid ""
+"Error during downloading image\n"
+"%s\n"
+"%s"
+msgstr ""
+"Fehler beim Herunterladen vom Image\n"
+"%s\n"
+"%s"
+
+msgid ""
+"Error during unzipping image\n"
+"%s"
+msgstr ""
+"Fehler beim Entpacken vom Image\n"
+"%s"
+
+msgid ""
+"Image to install is invalid\n"
+"%s"
+msgstr ""
+"Image zum Installieren ist fehlerhaft\n"
+"%s"
+
+msgid ""
+"Flashing image was not successful\n"
+"%s"
+msgstr ""
+"Flashen vom Image war nicht erfolgreich\n"
+"%s"
+
 msgid "Backup your settings now?"
 msgstr "Sollen jetzt die Einstellungen gesichert werden?"
 
@@ -14681,13 +14891,13 @@ msgid "Enable CIHelper for SLOT CI1"
 msgstr "Aktiviere CIHelper für SLOT CI1"
 
 msgid "Sorry CIHelper Config is Missing"
-msgstr "CIHelper Konfiguration nicht vorhanden."
+msgstr "CIHelper Konfiguration nicht vorhanden"
 
 msgid "Would you save the entered PIN %s persistent?"
 msgstr "Möchten Sie die PIN %s dauerhaft speichern?"
 
 msgid "Set CI assignment for detection of available services."
-msgstr "Ermittlung verf. Kanäle inkl. Berücksichtigung der CI-Zuweisung"
+msgstr "Ermittlung verf. Kanäle inkl. Berücksichtigung der CI-Zuweisung."
 
 msgid "Include CI assignment"
 msgstr "Berücksichtigung der CI-Zuweisung"
@@ -14704,6 +14914,16 @@ msgstr "Multiboot Auswahl"
 msgid "Select Multiboot"
 msgstr "Multiboot Auswahl"
 
+msgid "Current Startup"
+msgstr "Aktuelles Startup"
+
+msgid ""
+"You can switch between the startups with yellow button.\n"
+"If no selection is made, the current startup is automatically taken."
+msgstr ""
+"Mit der gelben Taste kann zwischen den Startups gewechselt werden.\n"
+"Ohne Auswahl wird automatisch das aktuelle Startup genommen."
+
 msgid "MultiBoot Selector"
 msgstr "MultiBoot Auswahl"
 
@@ -14714,7 +14934,7 @@ msgid "Use the cursor keys to select an installed image and then Reboot button."
 msgstr "Wähle ein installiertes Image aus und dann die Neustart/OK Taste."
 
 msgid "SDcard is not initialised for multiboot - Exit and use MultiBoot Image Manager to initialise"
-msgstr "SD-Karte ist nicht für Multiboot initialisiert. Benutze Multiboot Verwaltung zur Initialisierung."
+msgstr "SD-Karte ist nicht für Multiboot initialisiert. Benutze Multiboot Verwaltung zur Initialisierung"
 
 msgid "Note: startup list does not show current image or empty startups."
 msgstr "Hinweis: Die Startupliste zeigt kein aktuelles Image oder leere Startups an."
@@ -14743,9 +14963,6 @@ msgstr "Multiboot-Manager - Die SD-Karte muss mindestens 8 MB groß sein."
 msgid "Multiboot manager - SDcard initialization run, please restart Image."
 msgstr "Multiboot-Manager - Initialisierung der SD-Karte. Bitte starten Sie die Box neu."
 
-msgid "Retrieving image list - Please wait..."
-msgstr "Image-Liste abrufen - Bitte warten Sie ..."
-
 msgid "Cannot find images - please try later"
 msgstr "Images können nicht gefunden werden. Versuchen Sie es später noch einmal"
 
@@ -14763,6 +14980,12 @@ msgstr "Multiboot Fehler! - kein %s in boot partition."
 
 msgid "No images found"
 msgstr "Keine Images gefunden"
+
+msgid "Downloaded Images"
+msgstr "Heruntergeladene Images"
+
+msgid "Do not flash image"
+msgstr "Jetzt kein Image flashen"
 
 msgid "MultiBoot image manager"
 msgstr "MultiBoot Image Manager"
@@ -14790,7 +15013,7 @@ msgid "startup %s -%s - %s (current image)"
 msgstr "Startup %s - %s - %s (aktuelles Image)"
 
 msgid "startup %s -%s- %s "
-msgstr "Startup %s - %s - %s"
+msgstr "Startup %s - %s - %s "
 
 msgid "startup %s - %s mode 1 (current image)"
 msgstr "Startup %s - %s Mode 1 (aktuelles Image)"
@@ -14863,7 +15086,7 @@ msgid "File '/boot/%s' copy to '/boot/STARTUP' failed!"
 msgstr "Datei '/boot/%s' kopieren nach '/boot/STARTUP' fehlgeschlagen!"
 
 msgid "Next boot will start from Image 1."
-msgstr "Beim nächsten Start wird von Image 1. gebootet"
+msgstr "Beim nächsten Start wird von Image 1. gebootet."
 
 msgid "Can not repair file %s"
 msgstr "Konnte Datei %s nicht reparieren"
@@ -14992,3 +15215,46 @@ msgstr "klassisch (schnell), retune"
 
 msgid "This allows you to show drivers modules in downloads"
 msgstr "Dies erlaubt Ihnen die Anzeige von Treibern im Downloadbereich"
+
+msgid "Enable %s pro:"
+msgstr "Aktiviere %s pro:"
+
+msgid "Style:"
+msgstr "Farbe:"
+
+msgid "Pixels\n"
+msgstr "Pixel\n"
+
+msgid ""
+"Can be used to test defect pixels on TV screen.\n"
+"\n"
+"Available color test screens:\n"
+"\n"
+"red\n"
+"green\n"
+"blue\n"
+"white\n"
+"black\n"
+"cyan\n"
+"magenta\n"
+"yellow\n"
+"\n"
+"Screens change with left/right buttons or use red, green, blue to toggle.\n"
+"Yellow for returning back to this intro"
+msgstr ""
+"Kann verwendet werden um auf defekte Pixel am TV zu testen.\n"
+"\n"
+"Verfügbare Farb-Test-Bildschirme:\n"
+"\n"
+"Rot\n"
+"Grün\n"
+"Blau\n"
+"Weiß\n"
+"Schwarz\n"
+"Cyan\n"
+"Magenta\n"
+"Gelb\n"
+"\n"
+"Bildschirm wechseln mit Tasten LINKS/RECHTS oder mit den\n"
+"Tasten ROT, GRÜN und BLAU direkt umschalten.\n"
+"Mit Taste GELB zurück zur Einführung."

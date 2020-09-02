@@ -67,6 +67,7 @@ class PositionerSetup(Screen):
 	def __init__(self, session, feid):
 		self.session = session
 		Screen.__init__(self, session)
+		self.setTitle(_("Positioner setup"))
 		self.feid = feid
 		self.oldref = None
 		log.open(self.LOG_SIZE)
@@ -650,7 +651,7 @@ class PositionerSetup(Screen):
 		self["symbolrate_value"].setText(str(transponderdata.get("symbol_rate")))
 		self["fec_value"].setText(str(transponderdata.get("fec_inner")))
 		self["polarisation"].setText(str(transponderdata.get("polarization")))
-
+	
 	@staticmethod
 	def rotorCmd2Step(rotorCmd, stepsize):
 		return round(float(rotorCmd & 0xFFF) / 0x10 / stepsize) * (1 - ((rotorCmd & 0x1000) >> 11))
@@ -1017,11 +1018,12 @@ class PositionerSetupLog(Screen):
 	def __init__(self, session):
 		self.session = session
 		Screen.__init__(self, session)
+		self.setTitle(_("Positioner Setup Log"))
 		self["key_red"] = Button(_("Clear"))
 		self["key_green"] = Button()
 		self["key_yellow"] = Button()
 		self["key_blue"] = Button(_("Save"))
-		self["list"] = ScrollLabel(log.value)
+		self["list"] = ScrollLabel(log.getvalue())
 		self["actions"] = ActionMap(["DirectionActions", "OkCancelActions", "ColorActions"],
 		{
 			"red": self.clear,
@@ -1068,6 +1070,7 @@ class TunerScreen(ConfigListScreen, Screen):
 		self.fe_data = fe_data
 		Screen.__init__(self, session)
 		ConfigListScreen.__init__(self, None)
+		self.setTitle(_("Tune"))
 		self.createConfig(fe_data)
 		self.initialSetup()
 		self.createSetup()

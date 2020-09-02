@@ -694,8 +694,11 @@ class ChannelSelectionEPG:
 		pos = self.servicelist.instance.position().y()
 		sely = int(pos)+(int(self.servicelist.ItemHeight)*int(indx))
 		temp = int(self.servicelist.instance.position().y())+int(self.servicelist.instance.size().height())
-		if int(sely) >= temp:
-			sely = int(sely) - int(self.listHeight)
+		if config.usage.servicelist_twolines.value:
+			sely = int(sely) - int(temp)
+		else:
+			if int(sely) >= temp:
+				sely = int(sely) - int(self.listHeight)
 		menu1 = _("Record now")
 		menu2 = _("Record next")
 		menu3 = _("Zap next")
@@ -1385,6 +1388,7 @@ class ChannelSelectionBase(Screen):
 				"nextMarker": self.nextMarker,
 				"prevMarker": self.prevMarker,
 				"gotAsciiCode": self.keyAsciiCode,
+				"toggleTwoLines": self.toggleTwoLines,
 				"1": self.keyNumberGlobal,
 				"2": self.keyNumberGlobal,
 				"3": self.keyNumberGlobal,
@@ -1835,6 +1839,13 @@ class ChannelSelectionBase(Screen):
 		if len(charstr) == 1:
 			self.servicelist.moveToChar(charstr[0])
 
+	def toggleTwoLines(self):
+		if self.servicelist.mode == self.servicelist.MODE_FAVOURITES:
+			config.usage.servicelist_twolines.value = not config.usage.servicelist_twolines.value
+			config.usage.servicelist_twolines.save()
+		else:
+			return 0
+
 	def getRoot(self):
 		return self.servicelist.getRoot()
 
@@ -2144,7 +2155,8 @@ class ChannelSelection(ChannelSelectionBase, ChannelSelectionEdit, ChannelSelect
 		if self.pipzaptimer.isActive():
 			self.pipzaptimer.callback.remove(self.hidePipzapMessage)
 			self.pipzaptimer.stop()
-		self.session.pip.inactive()
+		if hasattr(self.session, 'pip'):
+			self.session.pip.inactive()
 
 	#called from infoBar and channelSelected
 	def zap(self, enable_pipzap=False, preview_zap=False, checkParentalControl=True, ref=None):

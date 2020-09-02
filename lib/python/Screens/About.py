@@ -19,6 +19,7 @@ from Components.Label import Label
 from Components.ProgressBar import ProgressBar
 
 from Tools.StbHardware import getFPVersion
+from Tools.Directories import fileCheck
 
 import os
 import re
@@ -79,19 +80,19 @@ class About(Screen):
 				return str(netspeed)
 		def netspeed_ra0():
 			netspeed=""
-			for line in popen('iwconfig ra0 | grep Bit | cut -c 75-85','r'):
+			for line in popen('iwconfig ra0 | grep Bit | cut -c 20-30','r'):
 				line = line.strip()
 				netspeed += line
 				return str(netspeed)
 		def netspeed_wlan0():
 			netspeed=""
-			for line in popen('iwconfig wlan0 | grep Bit | cut -c 75-85','r'):
+			for line in popen('iwconfig wlan0 | grep Bit | cut -c 20-30','r'):
 				line = line.strip()
 				netspeed += line
 				return str(netspeed)
 		def netspeed_wlan1():
 			netspeed=""
-			for line in popen('iwconfig wlan1 | grep Bit | cut -c 75-85','r'):
+			for line in popen('iwconfig wlan1 | grep Bit | cut -c 20-30','r'):
 				line = line.strip()
 				netspeed += line
 				return str(netspeed)
@@ -134,7 +135,7 @@ class About(Screen):
 		except:
 			BootLoaderVersion = 0
 
-		if getMachineBuild() in ('vusolo4k'):
+		if getMachineBuild() in ('vusolo4k','gbx34k'):
 			cpuMHz = "   (1,5 GHz)"
 		elif getMachineBuild() in ('u41','u42'):
 			cpuMHz = "   (1,0 GHz)"
@@ -144,7 +145,7 @@ class About(Screen):
 			cpuMHz = "   (1,3 GHz)"
 		elif getMachineBuild() in ('u5','u51','u52','u53','u5pvr','h9','sf8008','sf8008s','sf8008t','hd60',"hd61",'i55plus'):
 			cpuMHz = "   (1,6 GHz)"
-		elif getMachineBuild() in ('sf5008','et13000','et1x000','hd52','hd51','sf4008','vs1500','h7','osmio4k'):
+		elif getMachineBuild() in ('sf5008','et13000','et1x000','hd52','hd51','sf4008','vs1500','h7','osmio4k','osmio4kplus','osmini4k'):
 			try:
 				import binascii
 				f = open('/sys/firmware/devicetree/base/cpus/cpu@0/clock-frequency', 'rb')
@@ -248,6 +249,13 @@ class About(Screen):
 		AboutText += _("HDF Version:\tV%s") % getImageVersion() + " Build #" + getImageBuild() + " based on " + getOEVersion() + "\n"
 		AboutText += _("Kernel (Box):\t%s") % about.getKernelVersionString() + " (" + getBoxType() + ")" + "\n"
 
+		if path.isfile("/etc/issue"):
+			version = open("/etc/issue").readlines()[-2].upper().strip()[:-6]
+			if path.isfile("/etc/image-version"):
+				build = self.searchString("/etc/image-version", "^build=")
+				version = "%s #%s" % (version,build)
+			AboutText += _("Image:\t%s") % version + "\n"
+
 		imagestarted = ""
 		bootname = ''
 		if path.exists('/boot/bootname'):
@@ -286,12 +294,13 @@ class About(Screen):
 				if bootname: bootname = "   (%s)" %bootname
 				AboutText += _("Partition:\t%s") % "STARTUP_" + image + bootname + "\n"
 
-		if path.isfile("/etc/issue"):
-			version = open("/etc/issue").readlines()[-2].upper().strip()[:-6]
-			if path.isfile("/etc/image-version"):
-				build = self.searchString("/etc/image-version", "^build=")
-				version = "%s #%s" % (version,build)
-			AboutText += _("Image:\t%s") % version + "\n"
+		if SystemInfo["HaveMultiBoot"]:
+			MyFlashDate = about.getFlashDateString()
+			if path.isfile("/etc/filesystems"):
+				AboutText += _("Flashed:\t%s") % MyFlashDate + "\n"
+				#AboutText += _("Flashed:\tMultiboot active\n")
+		else:
+			AboutText += _("Flashed:\t%s\n") % about.getFlashDateString()
 
 		string = getDriverDate()
 		year = string[0:4]
@@ -304,20 +313,17 @@ class About(Screen):
 		AboutText += _("Drivers:\t%s") % driversdate + "\n"
 		AboutText += _("GStreamer:\t%s") % about.getGStreamerVersionString() + "\n"
 		AboutText += _("Python:\t%s\n") % about.getPythonVersionString()
-		if path.exists('/boot/STARTUP'):
-			#if getMachineBuild() in ('cc1','sf8008','sf8008s','sf8008t'):
-			#	os.system("tune2fs -l /dev/sda2 | grep 'Filesystem created:' | cut -d ' ' -f 9-13 > /tmp/flashdate" )
-			#else:
-			#	os.system("tune2fs -l /dev/sda1 | grep 'Filesystem created:' | cut -d ' ' -f 9-13 > /tmp/flashdate" )
-			#flashdate = open('/tmp/flashdate', 'r').read()
-			#AboutText += _("Flashed:\t%s") % flashdate
-			AboutText += _("Flashed:\tMultiboot active\n")
-		else:
-			AboutText += _("Flashed:\t%s\n") % about.getFlashDateString()
 		AboutText += _("Free Flash:\t%s\n") % freeflash()
 		AboutText += _("Skin:\t%s (%s x %s)\n") % (config.skin.primary_skin.value.split('/')[0], getDesktop(0).size().width(), getDesktop(0).size().height())
 		AboutText += _("Last update:\t%s") % getEnigmaVersionString() + " to Build #" + getImageBuild() + "\n"
 		AboutText += _("E2 (re)starts:\t%s\n") % config.misc.startCounter.value
+		AboutText += _("Uptime") + ":\t" + about.getBoxUptime() + "\n"
+		if SystemInfo["WakeOnLAN"]:
+			if fileCheck("/proc/stb/power/wol"):
+				WOLmode = open("/proc/stb/power/wol").read()[:-1]
+			if fileCheck("/proc/stb/fp/wol"):
+				WOLmode = open("/proc/stb/fp/wol").read()[:-1]
+			AboutText += _("WakeOnLAN:\t%s\n") % WOLmode
 		AboutText += _("Network:")
 		eth0 = about.getIfConfig('eth0')
 		eth1 = about.getIfConfig('eth1')
@@ -505,11 +511,11 @@ class SystemMemoryInfo(Screen):
 		self.skinName = ["SystemMemoryInfo", "About"]
 		self["lab1"] = StaticText(_("OpenHDF"))
 		self["AboutScrollLabel"] = ScrollLabel()
-
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
 			{
 				"cancel": self.close,
 				"ok": self.close,
+				"blue": self.showMemoryInfo,
 				"up": self["AboutScrollLabel"].pageUp,
 				"down": self["AboutScrollLabel"].pageDown,
 			})
@@ -571,6 +577,9 @@ class SystemMemoryInfo(Screen):
 
 	def createSummary(self):
 		return AboutSummary
+
+	def showMemoryInfo(self):
+		self.session.open(MemoryInfo)
 
 class SystemNetworkInfo(Screen):
 	def __init__(self, session):

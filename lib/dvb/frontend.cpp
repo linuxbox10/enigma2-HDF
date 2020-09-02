@@ -1365,6 +1365,7 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 		|| strstr(m_description, "BCM73625 (G3)")
 		|| strstr(m_description, "BCM45208")
 		|| strstr(m_description, "BCM45308")
+		|| strstr(m_description, "BCM3158")
 		)
 	{
 		ret = (snr * 100) >> 8;
@@ -1422,6 +1423,10 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 	{
 		ret = (int)((((double(snr) / (65535.0 / 100.0)) * 0.1710) - 1.0000) * 100);
 	}
+	else if (!strcmp(m_description, "GIGA DVB-S2 NIM (TS3L10)") || !strcmp(m_description, "GIGA DVB-S2 NIM (TS2L08)")) //GB IP 4K
+	{
+		ret = snr;
+	}
 	else if (!strcmp(m_description, "DVB-S2 NIM(45208 FBC)")
 		|| !strcmp(m_description, "DVB-S2 NIM(45308 FBC)")
 		)
@@ -1451,7 +1456,7 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 				break;
 			case feTerrestrial:
 				ret = (int)(snr / 30);
-				ter_max = 1700;
+				ter_max = 4200;
 				break;
 		}
 	}
@@ -1531,7 +1536,7 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 	}
 	else if (!strcmp(m_description, "Si21682") || !strcmp(m_description, "Si2168")) // SF4008 T/T2/C and Zgemma TC Models
 	{
-	    int type = -1;
+		int type = -1;
 		oparm.getSystem(type);
 		switch (type)
 		{
@@ -1578,6 +1583,10 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 	else if (!strncmp(m_description, "Si216", 5)) // all new Models with SI Tuners
 	{
 		ret = snr;
+	}
+	else if (!strcmp(m_description, "DVB-S2 NIM")) // dinobot
+	{
+		ret = (int)(snr / 8);
 	}
 
 	signalqualitydb = ret;

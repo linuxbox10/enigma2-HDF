@@ -115,6 +115,7 @@ class Harddisk:
 		self.mount_path = None
 		self.mount_device = None
 		self.phys_path = os.path.realpath(self.sysfsPath('device'))
+		self.internal = "pci" in self.phys_path or "ahci" in self.phys_path or "sata" in self.phys_path
 
 		if self.type == DEVTYPE_UDEV:
 			self.dev_path = '/dev/' + self.device
@@ -137,7 +138,7 @@ class Harddisk:
 					break
 
 		print "new Harddisk", self.device, '->', self.dev_path, '->', self.disk_path
-		if not removable:
+		if (self.internal or not removable):
 			self.startIdle()
 
 	def __lt__(self, ob):
@@ -421,7 +422,7 @@ class Harddisk:
 		elif size > 2048:
 			# Over 2GB: 32 i-nodes per megabyte
 			task.args += ["-T", "largefile", "-N", str(size * 32)]
-		task.args += ["-m0", "-O ^metadata_csum", "-O", ",".join(big_o_options), self.partitionPath("1")]
+		task.args += ["-F", "-F", "-m0", "-O ^metadata_csum", "-O", ",".join(big_o_options), self.partitionPath("1")]
 
 		task = MountTask(job, self)
 		task.weighting = 3
@@ -790,9 +791,9 @@ class HarddiskManager:
 		error = False
 		removable = False
 		BLACKLIST=[]
-		if getMachineBuild() in ('u51','u52','u53','u5','u5pvr','vuzero4k','et1x000','vuuno4k','vuuno4kse','vuultimo4k','vusolo4k','hd51','hd52','hd60','hd61','sf4008','dm900','dm7080','dm820', 'gb7252', 'dags7252', 'vs1500','h7','8100s','et13000','sf5008','sf8008','sf8008s','sf8008t', 'gbmv200'):
+		if getMachineBuild() in ('u51','u52','u53','u5','u5pvr','vuzero4k','et1x000','vuuno4k','vuuno4kse','vuultimo4k','vusolo4k','hd51','hd52','hd60','hd61','sf4008','dm900','dm7080','dm820', 'gb7252', 'gbx34k', 'dags7252', 'vs1500','h7','8100s','et13000','sf5008','sf8008','sf8008m','sf8008s','sf8008t', 'gbmv200'):
 			BLACKLIST=["mmcblk0"]
-		elif getMachineBuild() in ('xc7439','osmio4k'):
+		elif getMachineBuild() in ('xc7439','osmio4k','osmio4kplus','osmini4k'):
 			BLACKLIST=["mmcblk1"]
 
 		blacklisted = False

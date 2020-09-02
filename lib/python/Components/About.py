@@ -8,7 +8,11 @@ def getVersionString():
 
 def getFlashDateString():
 	try:
-		return time.strftime(_("%Y-%m-%d"), time.localtime(os.stat("/boot").st_ctime))
+		tm = time.localtime(os.stat("/etc/version").st_mtime)
+		if tm.tm_year >= 2011:
+			return time.strftime(_("%d.%m.%Y %H:%M:%S"),tm)
+		else:
+			return _("unknown")
 	except:
 		return _("unknown")
 
@@ -51,9 +55,9 @@ def getChipSetString():
 			return "unavailable"
 
 def getCPUString():
-	if getMachineBuild() in ('vuuno4k', 'vuultimo4k','vusolo4k', 'hd51', 'hd52', 'sf4008', 'dm900', 'dm920', 'gb7252', 'dags7252', 'vs1500', 'h7', '8100s','osmio4k'):
+	if getMachineBuild() in ('vuuno4k', 'vuultimo4k','vusolo4k', 'hd51', 'hd52', 'sf4008', 'dm900', 'dm920', 'gb7252', 'gbx34k', 'dags7252', 'vs1500', 'h7', '8100s','osmio4k','osmio4kplus','osmini4k'):
 		return "Broadcom "
-	elif getMachineBuild() in ('u41','u42','u5','u51','u52','u53','u5pvr','h9','sf8008','sf8008s','sf8008t','hd60','hd61','i55plus'):
+	elif getMachineBuild() in ('u41','u42','u5','u51','u52','u53','u5pvr','h9','sf8008','sf8008m','sf8008s','sf8008t','hd60','hd61','i55plus'):
 		return "Hisilicon"
 	else:
 		try:
@@ -74,17 +78,17 @@ def getCPUString():
 			return "unavailable"
 
 def getCPUSpeedString():
-	if getMachineBuild() in ('vusolo4k'):
+	if getMachineBuild() in ('vusolo4k', 'gbx34k'):
 		return "1,5 GHz"
 	elif getMachineBuild() in ('vuuno4k','dm900', 'gb7252', 'dags7252'):
 		return "1,7 GHz"
-	elif getMachineBuild() in ('u5','u51','u52','u53','u5pvr','h9','sf8008','sf8008s','sf8008t','hd60','hd61','i55plus', 'gbmv200'):
+	elif getMachineBuild() in ('u5','u51','u52','u53','u5pvr','h9','sf8008','sf8008m','sf8008s','sf8008t','hd60','hd61','i55plus', 'gbmv200'):
 		return "1,6 GHz"
 	elif getMachineBuild() in ('u41','u42'):
 		return "1,0 GHz"
 	elif getMachineBuild() in ('formuler1tc','formuler1', 'triplex'):
 		return "1,3 GHz"
-	elif getMachineBuild() in ('hd51','hd52','sf4008','vs1500','et1x000','h7','8100s','osmio4k'):
+	elif getMachineBuild() in ('hd51','hd52','sf4008','vs1500','et1x000','h7','8100s','osmio4k','osmio4kplus','osmini4k'):
 		try:
 			import binascii
 			f = open('/sys/firmware/devicetree/base/cpus/cpu@0/clock-frequency', 'rb')
@@ -121,7 +125,7 @@ def getCpuCoresString():
 			if len(splitted) > 1:
 				splitted[1] = splitted[1].replace('\n','')
 				if splitted[0].startswith("processor"):
-					if getMachineBuild() in ('gbmv200','u51','u52','u53','u54','u55','u56','vuultimo4k','u5','u5pvr','h9','h9combo','h10','alien5','cc1','sf8008','hd60','hd61','i55plus','ustym4kpro','beyonwizv2','viper4k','v8plus','vuduo4k','multibox'):
+					if getMachineBuild() in ('gbmv200','u51','u52','u53','u54','u55','u56','vuultimo4k','u5','u5pvr','h9','h9combo','h10','alien5','cc1','sf8008','sf8008m','hd60','hd61','i55plus','ustym4kpro','beyonwizv2','viper4k','v8plus','vuduo4k','multibox'):
 						cores = 4
 					elif getMachineBuild() in ('u41','u42','u43'):
 						cores = 2
@@ -204,6 +208,24 @@ def getPythonVersionString():
 		return output.split(' ')[1]
 	except:
 		return _("unknown")
+
+def getBoxUptime():
+	try:
+		time = ''
+		f = open("/proc/uptime", "rb")
+		secs = int(f.readline().split('.')[0])
+		f.close()
+		if secs > 86400:
+			days = secs / 86400
+			secs = secs % 86400
+			time = ngettext("%d day","%d days", days) % days + " "
+		h = secs / 3600
+		m = (secs % 3600) / 60
+		time += ngettext("%d hour", "%d hours", h) % h + " "
+		time += ngettext("%d minute", "%d minuts", m) % m
+		return  "%s" % time
+	except:
+		return '-'
 
 # For modules that do "from About import about"
 about = modules[__name__]

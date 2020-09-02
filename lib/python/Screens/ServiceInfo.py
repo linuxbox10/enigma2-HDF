@@ -17,6 +17,9 @@ TYPE_VALUE_DEC = 2
 TYPE_VALUE_HEX_DEC = 3
 TYPE_SLIDER = 4
 TYPE_VALUE_ORBIT_DEC = 5
+TYPE_VALUE_FREQ = 6
+TYPE_VALUE_FREQ_FLOAT = 7
+TYPE_VALUE_BITRATE = 8
 
 def to_unsigned(x):
 	return x & 0xFFFFFFFF
@@ -172,7 +175,8 @@ class ServiceInfo(Screen):
 					(_("Videosize"), resolution, TYPE_TEXT),
 					(_("Videocodec"), videocodec, TYPE_TEXT),
 					(_("Namespace"), self.getServiceInfoValue(iServiceInformation.sNamespace), TYPE_VALUE_HEX, 8),
-					(_("Service reference"), refstr, TYPE_TEXT))
+					(_("Service reference"), ":".join(refstr.split(":")[:10]), TYPE_TEXT),
+					(_("URL"), refstr.split(":")[10].replace("%3a", ":"), TYPE_TEXT))
 
 			self.fillList(Labels)
 		else:
@@ -240,7 +244,7 @@ class ServiceInfo(Screen):
 						(_("System"), frontendData["system"], TYPE_TEXT),
 						(_("Modulation"), frontendData["modulation"], TYPE_TEXT),
 						(_("Orbital position"), frontendData["orbital_position"], TYPE_VALUE_DEC),
-						(_("Frequency"), frontendData["frequency"], TYPE_VALUE_DEC),
+						(_("Frequency"), frontendData.get("frequency", 0), TYPE_VALUE_FREQ_FLOAT),
 						(_("Symbol rate"), frontendData["symbol_rate"], TYPE_VALUE_DEC),
 						(_("Polarization"), frontendData["polarization"], TYPE_TEXT),
 						(_("Inversion"), frontendData["inversion"], TYPE_TEXT),
